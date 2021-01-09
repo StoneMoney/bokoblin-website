@@ -3,7 +3,7 @@
     <Nav />
     <Nuxt />
     <b-container>
-      Bokoblin &copy; 2020 |
+      Bokoblin &copy; 2021 |
       <nuxt-link to="/about">
         About
       </nuxt-link> |

@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-row>
-      <b-col class="m-3">
+      <b-col class="m-3" sm="12" md="6">
         <h1>
           <b-badge :style="'background-color:#'+segment.marathon.color">
             {{ segment.marathon.id }}
@@ -14,21 +14,19 @@
           </b-badge> Segment
         </h1>
         <SegmentCard :key="segment.id" :data="segment" />
-        <b-container class="m-3">
-          <b-list-group>
-            <b-list-group-item class="d-flex justify-content-between align-items-center">
-              Start time: {{ (new Date(segment.start_time)).toLocaleString() }} ({{ getDuration(segment.marathon.start_date,segment.start_time) }})
-            </b-list-group-item>
-            <b-list-group-item class="d-flex justify-content-between align-items-center">
-              End time: {{ (new Date(segment.end_time)).toLocaleString() }} ({{ getDuration(segment.marathon.start_date,segment.end_time) }})
-            </b-list-group-item>
-            <b-list-group-item class="d-flex justify-content-between align-items-center">
-              Raised: {{ toUSD(parseFloat(segment.raised) / getDurationNumberal(segment.start_time,segment.end_time)) }}/hr
-            </b-list-group-item>
-          </b-list-group>
-        </b-container>
+        <b-list-group class="mt-3">
+          <b-list-group-item class="d-flex justify-content-between align-items-center">
+            Start time: {{ (new Date(segment.start_time)).toLocaleString() }} ({{ getDuration(segment.marathon.start_date,segment.start_time) }})
+          </b-list-group-item>
+          <b-list-group-item class="d-flex justify-content-between align-items-center">
+            End time: {{ (new Date(segment.end_time)).toLocaleString() }} ({{ getDuration(segment.marathon.start_date,segment.end_time) }})
+          </b-list-group-item>
+          <b-list-group-item class="d-flex justify-content-between align-items-center">
+            Raised: {{ toUSD(parseFloat(segment.raised) / getDurationNumberal(segment.start_time,segment.end_time)) }}/hr
+          </b-list-group-item>
+        </b-list-group>
       </b-col>
-      <b-col v-if="segment.vod" class="m-3">
+      <b-col v-if="segment.vod" class="m-3" sm="12" md="5">
         <h1>VOD</h1>
         <b-card>
           <client-only placeholder="Loading...">
@@ -114,10 +112,17 @@ export default {
           content: 'Bokoblin archive data for ' + this.segment.game.title + ' at ' + this.segment.marathon.full_name + ' which raised ' + this.toUSD(this.segment.raised) + ' for ' + this.segment.marathon.charity.full_name + '.'
         },
         {
+          hid: 'og:title',
           property: 'og:title',
           content: this.segment.game.title + ' @ ' + this.segment.marathon.slug + ' - Bokoblin'
         },
         {
+          hid: 'og:description',
+          property: 'og:description',
+          content: 'Bokoblin archive data for ' + this.segment.game.title + ' at ' + this.segment.marathon.full_name + ' which raised ' + this.toUSD(this.segment.raised) + ' for ' + this.segment.marathon.charity.full_name + '.'
+        },
+        {
+          hid: 'theme-color',
           name: 'theme-color',
           content: '#' + this.segment.marathon.color
         }

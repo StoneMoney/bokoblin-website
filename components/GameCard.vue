@@ -1,21 +1,15 @@
 <template>
   <div>
-    <b-container class="m-3">
-      <b-card>
-        <b-card-title>
-          <nuxt-link :to="'/game/'+data.id">
-            <span v-if="data.isZelda" v-b-tooltip.hover title="Zelda Game">
-              <b-icon-map-fill />
-            </span>
-            <span v-if="data.isEvent" v-b-tooltip.hover title="Special Event">
-              <b-icon-star-fill />
-            </span>
-            {{ data.title }}
-            <span class="h6 mb-2"><b-icon-arrow-up-right-circle-fill /></span>
-          </nuxt-link>
-        </b-card-title>
-      </b-card>
-    </b-container>
+    <nuxt-link :to="'/game/'+data.id">
+      <span v-if="data.isZelda" v-b-tooltip.hover title="Zelda Game">
+        <b-icon-map-fill />
+      </span>
+      <span v-if="data.isEvent" v-b-tooltip.hover title="Special Event">
+        <b-icon-star-fill />
+      </span>
+      {{ data.title }}
+      <span class="h6 mb-2"><b-icon-arrow-up-right-circle-fill /></span>
+    </nuxt-link>
   </div>
 </template>
 

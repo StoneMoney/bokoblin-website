@@ -1,6 +1,6 @@
 <template>
   <client-only placeholder="Loading...">
-    <b-navbar toggleable="lg" type="dark" variant="dark">
+    <b-navbar toggleable="lg" type="dark" variant="dark" sticky>
       <b-navbar-brand href="#">
         <nuxt-link to="/" class="unstyle">
           <img src="~/static/bokoskull.svg" height="32px"> Bokoblin
@@ -27,8 +27,8 @@
             </nuxt-link>
           </b-nav-item>
           <b-nav-item>
-            <nuxt-link to="/charities" class="unstyle">
-              Charities
+            <nuxt-link to="/causes" class="unstyle">
+              Causes
             </nuxt-link>
           </b-nav-item>
           <b-nav-item-dropdown text="Docs" right>

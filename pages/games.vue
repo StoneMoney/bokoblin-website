@@ -3,9 +3,15 @@
     <h1 class="m-3">
       Games
     </h1>
-    <template v-for="game in games">
-      <GameCard :key="game.id" :data="game" />
-    </template>
+    <b-col md="4">
+      <b-list-group class="m-1">
+        <template v-for="game in games">
+          <b-list-group-item :key="game.id">
+            <GameCard :data="game" />
+          </b-list-group-item>
+        </template>
+      </b-list-group>
+    </b-col>
   </div>
 </template>
 
@@ -35,10 +41,15 @@ export default {
           content: 'Bokoblin archive data for ' + this.games.length + ' games.'
         },
         {
+          hid: 'og:title',
           property: 'og:title',
           content: 'Games - Bokoblin'
         },
-        { name: 'theme-color', content: '#ff5959' }
+        {
+          hid: 'og:description',
+          property: 'og:description',
+          content: 'Bokoblin archive data for ' + this.games.length + ' games.'
+        }
 
       ]
     }

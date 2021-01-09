@@ -12,7 +12,7 @@
         </b-list-group-item>
         <b-list-group-item class="d-flex justify-content-between align-items-center">
           <span>Benefitting:
-            <nuxt-link :to="'/charity/'+marathon.charity.id">
+            <nuxt-link :to="'/cause/'+marathon.charity.id">
               {{ marathon.charity.slug }}
             </nuxt-link>
           </span>
@@ -35,7 +35,9 @@
     <span v-if="segments.length > 0">
       <h1 class="m-3">Segments ({{ segments.length }})</h1>
       <template v-for="segment in segments">
-        <SegmentCard :key="segment.id" :data="segment" />
+        <b-col :key="segment.id" md="7" lg="6" xl="5" class="mb-3">
+          <SegmentCard :data="segment" />
+        </b-col>
       </template>
     </span>
     <h3 v-else>
@@ -107,8 +109,14 @@ export default {
           content: 'Bokoblin archive data for ' + this.marathon.full_name + ' which raised ' + this.toUSD(this.marathon.total) + ' for ' + this.marathon.charity.slug + (this.segments.length > 0 ? ', over ' + this.segments.length + ' segments' : '') + '.'
         },
         {
+          hid: 'og:title',
           property: 'og:title',
           content: this.marathon.full_name + ' - Bokoblin'
+        },
+        {
+          hid: 'og:description',
+          property: 'og:description',
+          content: 'Bokoblin archive data for ' + this.marathon.full_name + ' which raised ' + this.toUSD(this.marathon.total) + ' for ' + this.marathon.charity.slug + (this.segments.length > 0 ? ', over ' + this.segments.length + ' segments' : '') + '.'
         },
         {
           name: 'theme-color',

@@ -59,11 +59,15 @@ export default {
           content: 'Bokoblin archive data for ' + this.attendees.length + ' attendees.'
         },
         {
+          hid: 'og:title',
           property: 'og:title',
           content: 'Attendees - Bokoblin'
         },
-        { name: 'theme-color', content: '#ff5959' }
-
+        {
+          hid: 'og:description',
+          property: 'og:description',
+          content: 'Bokoblin archive data for ' + this.attendees.length + ' attendees.'
+        }
       ]
     }
   }

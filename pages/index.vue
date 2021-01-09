@@ -2,7 +2,9 @@
   <b-container class="mx-auto m-3">
     <b-jumbotron bg-variant="dark">
       <template #header>
-        <img src="~/static/bokoblin.svg" width="100%">
+        <b-container class="mx-auto m-3 text-center">
+          <img src="~/static/bokoblin.svg" width="50%">
+        </b-container>
       </template>
 
       <template #lead>
@@ -25,9 +27,9 @@
               Games
             </b-button>
           </nuxt-link>
-          <nuxt-link to="/charities">
+          <nuxt-link to="/causes">
             <b-button variant="danger" size="lg">
-              Charities
+              Causes
             </b-button>
           </nuxt-link>
         </b-container>
@@ -74,10 +76,15 @@ export default {
           content: 'Bokoblin, archived data of the last 11 years of Kinstone-operated charity marathons'
         },
         {
+          hid: 'og:title',
           property: 'og:title',
           content: 'Bokoblin'
         },
-        { name: 'theme-color', content: '#ff5959' }
+        {
+          hid: 'og:description',
+          property: 'og:description',
+          content: 'Bokoblin, archived data of the last 11 years of Kinstone-operated charity marathons'
+        }
       ]
     }
   }

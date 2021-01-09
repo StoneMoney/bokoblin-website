@@ -4,7 +4,9 @@
       Marathons
     </h1>
     <template v-for="marathon in marathons">
-      <MarathonCard :key="marathon.id" :data="marathon" />
+      <b-col :key="marathon.id" md="7" lg="5" xl="4" class="mb-3">
+        <MarathonCard :data="marathon" />
+      </b-col>
     </template>
   </div>
 </template>
@@ -35,11 +37,15 @@ export default {
           content: 'Bokoblin archive data for ' + this.marathons.length + ' marathons.'
         },
         {
+          hid: 'og:title',
           property: 'og:title',
           content: 'Marathons - Bokoblin'
         },
-        { name: 'theme-color', content: '#ff5959' }
-
+        {
+          hid: 'og:description',
+          property: 'og:description',
+          content: 'Bokoblin archive data for ' + this.marathons.length + ' marathons.'
+        }
       ]
     }
   }

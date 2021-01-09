@@ -22,7 +22,9 @@
     <span v-if="segments.length > 0">
       <h1 class="m-3">Segments ({{ segments.length }})</h1>
       <template v-for="segment in segments">
-        <SegmentCard :key="segment.id" :data="segment" />
+        <b-col :key="segment.id" md="7" lg="6" xl="5" class="mb-3">
+          <SegmentCard :data="segment" />
+        </b-col>
       </template>
     </span>
     <h3 v-else>
@@ -42,7 +44,7 @@ export default {
   },
   async asyncData ({ $axios, params }) {
     const game = (await $axios.$get('https://bokoblin.herokuapp.com/?query={game(id:' + params.id + '){id,title,isZelda,isEvent}}')).data.game
-    const segments = (await $axios.$get('https://bokoblin.herokuapp.com/?query={segments(method:"game",id:' + params.id + '){id,game{title,id,isZelda,isEvent},modifier,marathon{slug,color},runners{name,id},filenames{filename,note},raised,start_time,end_time,vod,time_offset}}')).data.segments
+    const segments = (await $axios.$get('https://bokoblin.herokuapp.com/?query={segments(method:"game",id:' + params.id + '){id,game{title,id,isZelda,isEvent},modifier,marathon{full_name,color},runners{name,id},filenames{filename,note},raised,start_time,end_time,vod,time_offset}}')).data.segments
     return { game, segments }
   },
   data () {
@@ -97,9 +99,16 @@ export default {
           content: 'Bokoblin archive data for ' + this.game.title + (this.segments.length > 0 ? ', which has been run ' + this.segments.length + ' times' : '') + '.'
         },
         {
+          hid: 'og:title',
           property: 'og:title',
           content: this.game.title + ' - Bokoblin'
-        }
+        },
+        {
+          hid: 'og:description',
+          property: 'og:description',
+          content: 'Bokoblin archive data for ' + this.game.title + (this.segments.length > 0 ? ', which has been run ' + this.segments.length + ' times' : '') + '.'
+        },
+        { name: 'theme-color', content: '#ff5959' }
       ]
     }
   }

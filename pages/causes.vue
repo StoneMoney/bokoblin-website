@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 class="m-3">
-      Charities
+      Causes
     </h1>
     <b-container fluid>
       <b-card-group deck>
@@ -32,17 +32,23 @@ export default {
   },
   head () {
     return {
-      title: 'Charities - Bokoblin',
+      title: 'Causes - Bokoblin',
       meta: [
         // hid is used as unique identifier. Do not use `vmid` for it as it will not work
         {
           hid: 'description',
           name: 'description',
-          content: 'Bokoblin archive data for ' + this.charities.length + ' charities.'
+          content: 'Bokoblin archive data for ' + this.charities.length + ' causes.'
         },
         {
+          hid: 'og:title',
           property: 'og:title',
-          content: 'Charities - Bokoblin'
+          content: 'Causes - Bokoblin'
+        },
+        {
+          hid: 'og:description',
+          property: 'og:description',
+          content: 'Bokoblin archive data for ' + this.charities.length + ' causes.'
         },
         { name: 'theme-color', content: '#ff5959' }
 

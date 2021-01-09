@@ -19,7 +19,9 @@
     <span v-if="marathons.length > 0">
       <h1 class="m-3">Marathons ({{ marathons.length }})</h1>
       <template v-for="marathon in marathons">
-        <MarathonCard :key="marathon.id" :data="marathon" />
+        <b-col :key="marathon.id" md="7" lg="6" xl="5" class="mb-3">
+          <MarathonCard :data="marathon" />
+        </b-col>
       </template>
     </span>
     <h3 v-else>
@@ -67,9 +69,16 @@ export default {
           content: 'Bokoblin archive data for ' + this.charity.full_name + (this.marathons.length > 0 ? ', including ' + this.marathons.length + ' marathons' : '') + (parseFloat(this.charity.total) > 0 ? ' raising ' + this.toUSD(this.charity.total) + ' across them' : '') + '.'
         },
         {
+          hid: 'og:title',
           property: 'og:title',
           content: this.charity.full_name + ' - Bokoblin'
-        }
+        },
+        {
+          hid: 'og:description',
+          property: 'og:description',
+          content: 'Bokoblin archive data for ' + this.charity.full_name + (this.marathons.length > 0 ? ', including ' + this.marathons.length + ' marathons' : '') + (parseFloat(this.charity.total) > 0 ? ' raising ' + this.toUSD(this.charity.total) + ' across them' : '') + '.'
+        },
+        { name: 'theme-color', content: '#ff5959' }
       ]
     }
   }
