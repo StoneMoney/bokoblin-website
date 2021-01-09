@@ -1,6 +1,6 @@
 export default {
   // Target (https://go.nuxtjs.dev/config-target)
-  target: 'static',
+  target: 'server',
 
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
@@ -11,7 +11,14 @@ export default {
       { hid: 'description', name: 'description', content: '' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon/favicon-32x32.png' },
+      { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon/favicon-16x16.png' },
+      { rel: 'apple-touch-icon', sizes: '180x180', href: '/favicon/apple-touch-icon.png' },
+      { rel: 'manifest', href: '/favicon/site.webmanifest' },
+      { rel: 'mask-icon', href: '/favicon/safari-pinned-tab.svg', color: '#ff5959' },
+      { rel: 'shortcut icon', type: 'image/x-icon', href: '/favicon/favicon.ico' },
+      { rel: 'msapplication-TileColor', content: '#212529' },
+      { rel: 'msapplication-config', content: '/favicon/browserconfig.xml' }
     ]
   },
 
@@ -21,6 +28,7 @@ export default {
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [
+    { src: '@/plugins/youtube.js', ssr: false }
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
@@ -39,11 +47,13 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios'
   ],
-
+  bootstrapVue: {
+    icons: true
+  },
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {},
-
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {
+    transpile: ['vue-youtube-embed']
   }
 }
