@@ -12,13 +12,13 @@
       </span>
       {{ game.title }}
     </h1>
-    <!-- <b-col sm="9" md="4">
+    <b-col sm="9" md="4">
       <b-list-group class="m-1">
         <b-list-group-item class="d-flex justify-content-between align-items-center">
-          Dummy Data
+          Raised: {{ toUSD(raised) }}
         </b-list-group-item>
       </b-list-group>
-    </b-col> -->
+    </b-col>
     <span v-if="segments.length > 0">
       <h1 class="m-3">Segments ({{ segments.length }})</h1>
       <template v-for="segment in segments">
@@ -27,9 +27,9 @@
         </b-col>
       </template>
     </span>
-    <h3 v-else>
-      There are no records of segments played of this game
-    </h3>
+    <b-col v-else>
+      <h3>There are no records of segments played of this game</h3>
+    </b-col>
   </div>
 </template>
 
@@ -43,14 +43,16 @@ export default {
     SegmentCard
   },
   async asyncData ({ $axios, params }) {
-    const game = (await $axios.$get('https://bokoblin.herokuapp.com/?query={game(id:' + params.id + '){id,title,isZelda,isEvent}}')).data.game
-    const segments = (await $axios.$get('https://bokoblin.herokuapp.com/?query={segments(method:"game",id:' + params.id + '){id,game{title,id,isZelda,isEvent},modifier,marathon{full_name,color},runners{name,id},filenames{filename,note},raised,start_time,end_time,vod,time_offset}}')).data.segments
-    return { game, segments }
+    const game = (await $axios.$get('https://bokoblin.herokuapp.com/?query={game(id:' + params.id + '){id,title,isZelda,isEvent,segments{id,modifier,raised,game{id,title},marathon{full_name,color},runners{attendee{name,id,rank},runner_rank},filenames{filename,note},raised,start_time,end_time,vod,time_offset}}}')).data.game
+    const segments = game.segments
+    const raised = Math.ceil((segments.map(segment => parseFloat(segment.raised))).reduce((total, val) => { return total + val }) * 100) / 100
+    return { game, segments, raised }
   },
   data () {
     return {
       game: {},
-      segments: []
+      segments: [],
+      raised: 0
     }
   },
   methods: {
@@ -107,8 +109,7 @@ export default {
           hid: 'og:description',
           property: 'og:description',
           content: 'Bokoblin archive data for ' + this.game.title + (this.segments.length > 0 ? ', which has been run ' + this.segments.length + ' times' : '') + '.'
-        },
-        { name: 'theme-color', content: '#ff5959' }
+        }
       ]
     }
   }

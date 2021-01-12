@@ -1,5 +1,10 @@
 <template>
   <div class="m-2">
+    <b-container>
+      <b-card bg-variant="danger" class="text-light">
+        <b-icon-exclamation-diamond-fill /> API IS IN BETA AND MAY CHANGE
+      </b-card>
+    </b-container>
     <h1>Bokoblin.com API (BokoAPI)</h1>
     <p>BokoAPI is powered by Apollo and GraphQL, queries can be made from:</p>
     <a href="http://bokoblin.herokuapp.com/">http://bokoblin.herokuapp.com/</a>
@@ -82,6 +87,10 @@
 </template>
 
 <script>
+import { BIconExclamationDiamondFill } from 'bootstrap-vue'
 export default {
+  components: {
+    BIconExclamationDiamondFill
+  }
 }
 </script>

@@ -24,9 +24,9 @@
         </b-col>
       </template>
     </span>
-    <h3 v-else>
-      There are no records of segments played by this attendee
-    </h3>
+    <b-col v-else>
+      <h3>There are no records of marathons raising for this cause</h3>
+    </b-col>
   </div>
 </template>
 

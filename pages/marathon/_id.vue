@@ -40,9 +40,9 @@
         </b-col>
       </template>
     </span>
-    <h3 v-else>
-      There are no records of segments at this marathon
-    </h3>
+    <b-col v-else>
+      <h3>There are no records of segments at this marathon</h3>
+    </b-col>
   </div>
 </template>
 
@@ -53,8 +53,8 @@ export default {
     SegmentCard
   },
   async asyncData ({ $axios, params }) {
-    const marathon = (await $axios.$get('https://bokoblin.herokuapp.com/?query={marathon(id:' + params.id + '){id,color,type,total,full_name,start_date,stop_date,charity{id,slug}}}')).data.marathon
-    const segments = (await $axios.$get('https://bokoblin.herokuapp.com/?query={segments(method:"marathon",id:' + params.id + '){id,game{title,id,isZelda,isEvent},modifier,runners{name,id},filenames{filename,note},raised,start_time,end_time,vod,time_offset}}')).data.segments
+    const marathon = (await $axios.$get('https://bokoblin.herokuapp.com/?query={marathon(id:' + params.id + '){id,color,type,total,full_name,start_date,stop_date,charity{id,slug},segments{id,game{title,id,isZelda,isEvent},modifier,runners{attendee{name,id,rank},runner_rank},filenames{filename,note},raised,start_time,end_time,vod,time_offset}}}')).data.marathon
+    const segments = marathon.segments
     return { marathon, segments }
   },
   data () {
@@ -119,6 +119,7 @@ export default {
           content: 'Bokoblin archive data for ' + this.marathon.full_name + ' which raised ' + this.toUSD(this.marathon.total) + ' for ' + this.marathon.charity.slug + (this.segments.length > 0 ? ', over ' + this.segments.length + ' segments' : '') + '.'
         },
         {
+          hid: 'theme-color',
           name: 'theme-color',
           content: '#' + this.marathon.color
         }

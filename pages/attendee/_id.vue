@@ -11,6 +11,7 @@
         width="28px"
         class="text-right"
         title="Team Courage"
+        alt="Courage"
       >
       <img
         v-if="attendee.house === 'Wisdom'"
@@ -19,6 +20,7 @@
         width="28px"
         class="text-right"
         title="Team Wisdom"
+        alt="Wisdom"
       >
       <img
         v-if="attendee.house === 'Power'"
@@ -27,45 +29,113 @@
         width="28px"
         class="text-right"
         title="Team Power"
+        alt="Power"
       >
       {{ attendee.name }}
     </h1>
     <b-col sm="9" md="4">
       <b-list-group class="m-1">
         <b-list-group-item class="d-flex justify-content-between align-items-center">
-          Rank: {{ attendee.rank }}
+          Status (rank): {{ attendee.rank }}
+        </b-list-group-item>
+        <b-list-group-item v-if="raised > 0" class="d-flex justify-content-between align-items-center">
+          Raised: {{ toUSD(raised) }}
         </b-list-group-item>
       </b-list-group>
     </b-col>
-    <span v-if="segments.length > 0">
-      <h1 class="m-3">Segments ({{ segments.length }})</h1>
-      <template v-for="segment in segments">
-        <b-col :key="segment.id" md="7" lg="6" xl="5" class="mb-3">
+    <h1 class="m-3">
+      Segments ({{ segments.length }})
+    </h1>
+    <b-col class="mb-2">
+      <b-nav pills>
+        <b-nav-item :active="show === 0" :disabled="gameplaySegments.length == 0" @click="show = 0">
+          <b-icon-controller /> Gameplay <b-badge pill :variant="show === 0 ? 'light' : 'secondary'">
+            {{ gameplaySegments.length }}
+          </b-badge>
+        </b-nav-item>
+        <b-nav-item :active="show === 1" :disabled="commentarySegments.length == 0" @click="show = 1">
+          <b-icon-mic /> Commentary <b-badge pill :variant="show === 1 ? 'light' : 'secondary'">
+            {{ commentarySegments.length }}
+          </b-badge>
+        </b-nav-item>
+      </b-nav>
+    </b-col>
+    <span v-if="show == 0">
+      <template v-for="segment in gameplaySegments">
+        <b-col
+          :key="segment.id"
+          md="7"
+          lg="6"
+          xl="5"
+          class="mb-3"
+        >
           <SegmentCard :data="segment" />
         </b-col>
       </template>
     </span>
-    <h3 v-else>
-      There are no records of segments played by this attendee
-    </h3>
+    <span v-else-if="show == 1">
+
+      <template v-for="segment in commentarySegments">
+        <b-col
+          :key="segment.id"
+          md="7"
+          lg="6"
+          xl="5"
+          class="mb-3"
+        >
+          <SegmentCard :data="segment" />
+        </b-col>
+      </template>
+    </span>
+    <b-col v-else>
+      <h3>There are no records of segments played by this attendee</h3>
+    </b-col>
   </div>
 </template>
 
 <script>
+import { BIconMic, BIconController } from 'bootstrap-vue'
 import SegmentCard from '~/components/SegmentCard'
 export default {
   components: {
-    SegmentCard
+    SegmentCard,
+    BIconController,
+    BIconMic
   },
   async asyncData ({ $axios, params }) {
-    const attendee = (await $axios.$get('https://bokoblin.herokuapp.com/?query={attendee(id:' + params.id + '){id,name,house,house_color,rank}}')).data.attendee
-    const segments = (await $axios.$get('https://bokoblin.herokuapp.com/?query={segments(method:"runner",id:' + params.id + '){id,game{title,id,isZelda,isEvent},modifier,marathon{full_name,color},runners{name,id},filenames{filename,note},raised,start_time,end_time,vod,time_offset}}')).data.segments
-    return { attendee, segments }
+    const attendee = (await $axios.$get('https://bokoblin.herokuapp.com/?query={attendee(id:' + params.id + '){id,name,house,house_color,rank,segments{id,game{title,id,isZelda,isEvent},modifier,marathon{id,full_name,color},runners{attendee{name,id,rank},runner_rank},filenames{filename,note},raised,start_time,end_time,vod,time_offset}}}')).data.attendee
+    const segments = attendee.segments
+    if (segments.length > 0) {
+      const commentarySegments = []
+      const gameplaySegments = []
+      let show = 0
+      segments.map((segment) => {
+        switch (segment.runners.filter((r, i) => { return r.attendee.id === attendee.id })[0].runner_rank) {
+          case 0:
+          case 2:
+            gameplaySegments.push(segment)
+            break
+          case 1:
+            commentarySegments.push(segment)
+            break
+        }
+      })
+      const raised = Math.ceil((segments.map(segment => parseFloat(segment.raised))).reduce((total, val) => { return total + val }) * 100) / 100
+      if (gameplaySegments.length === 0 && commentarySegments.length > 0) {
+        show = 1
+      }
+      return { attendee, segments, gameplaySegments, commentarySegments, raised, show }
+    }
+    return { attendee }
   },
-  data () {
+  data ({ params }) {
     return {
       attendee: {},
-      segments: []
+      segments: [],
+      gameplaySegments: [],
+      commentarySegments: [],
+      raised: 0,
+      show: 0
     }
   },
   methods: {
@@ -124,6 +194,7 @@ export default {
           content: 'Bokoblin archive data for ' + this.attendee.name + (this.segments.length > 0 ? ', including ' + this.segments.length + ' segments' : '') + '.'
         },
         {
+          hid: 'theme-color',
           name: 'theme-color',
           content: '#' + this.attendee.house_color
         }

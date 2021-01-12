@@ -9,7 +9,10 @@
       </nuxt-link> |
       <nuxt-link to="/api">
         API
-      </nuxt-link>
+      </nuxt-link> |
+      <a href="https://discord.gg/bUjNJ9j">
+        Discord
+      </a>
     </b-container>
   </div>
 </template>
@@ -23,6 +26,15 @@ export default {
 }
 </script>
 <style>
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 0.35s;
+}
+.page-enter,
+.page-leave-to {
+  opacity: 0;
+}
+
 html {
   font-family:
     'Source Sans Pro',
@@ -47,5 +59,40 @@ html {
 *::after {
   box-sizing: border-box;
   margin: 0;
+}
+.unstyle {
+  color: inherit;
+}
+.unstyle:hover {
+  color: inherit;
+}
+.unstyle:active {
+  color: inherit;
+}
+.unstyle:link {
+  color: inherit;
+}
+.unstyle:visited {
+  color: inherit;
+}
+.unstyledx {
+  color: inherit;
+  text-decoration: inherit;
+}
+.unstyledx:hover {
+  color: inherit;
+  text-decoration: inherit;
+}
+.unstyledx:active {
+  color: inherit;
+  text-decoration: inherit;
+}
+.unstyledx:link {
+  color: inherit;
+  text-decoration: inherit;
+}
+.unstyledx:visited {
+  color: inherit;
+  text-decoration: inherit;
 }
 </style>
