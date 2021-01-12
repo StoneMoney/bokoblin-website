@@ -6,41 +6,46 @@
           v-if="data.type_id === 1"
           v-b-tooltip.hover
           src="~/static/1.svg"
-          width="28px"
+          width="24px"
           class="text-right"
           title="Flagship Event"
+          alt="Z"
         >
         <img
           v-else-if="data.type_id === 2"
           v-b-tooltip.hover
           src="~/static/1.svg"
-          width="28px"
+          width="24px"
           class="text-right"
           title="Flagship Mini"
+          alt="Z"
         >
         <img
           v-else-if="data.type_id === 3"
           v-b-tooltip.hover
           src="~/static/3.svg"
-          width="28px"
+          width="24px"
           class="text-right"
           title="Parallel Worlds"
+          alt="PW"
         >
         <img
           v-else-if="data.type_id === 4"
           v-b-tooltip.hover
           src="~/static/4.svg"
-          width="28px"
+          width="24px"
           class="text-right"
           title="Side Quest"
+          alt="SQ"
         >
         <img
           v-else-if="data.type_id === 5"
           v-b-tooltip.hover
           src="~/static/5.svg"
-          width="28px"
+          width="24px"
           class="text-right"
           title="Piece of Heart"
+          alt="PoH"
         >
       </div>
       <b-card-title>
@@ -87,7 +92,7 @@ export default {
 <style scoped>
 .marathonicon {
   position: absolute;
-  bottom: 0;
+  top: 0;
   right: 0;
 }
 </style>

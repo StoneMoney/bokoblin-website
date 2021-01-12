@@ -4,15 +4,15 @@
       Attendees
     </h1>
     <b-nav tabs>
-      <b-nav-item :active="show === 'Active'" @click="show = 'Active'">
+      <b-nav-item :active="show === 'Active'" class="ml-2" @click="show = 'Active'">
         Active
       </b-nav-item>
       <b-nav-item :active="show === 'Guest'" @click="show = 'Guest'">
         Guest
       </b-nav-item>
-      <b-nav-item :active="show === 'Inactive'" @click="show = 'Inactive'">
+      <!-- <b-nav-item :active="show === 'Inactive'" @click="show = 'Inactive'">
         Inactive
-      </b-nav-item>
+      </b-nav-item> -->
       <b-nav-item :active="show === 'Charity Rep'" @click="show = 'Charity Rep'">
         Charity Rep
       </b-nav-item>
@@ -20,15 +20,17 @@
         Other
       </b-nav-item>
     </b-nav>
-    <b-container fluid>
-      <b-card-group deck>
+    <b-col md="4" class="m-3">
+      <b-list-group>
         <template v-for="attendee in attendees">
           <div :key="attendee.id">
-            <AttendeeCard v-if="show === attendee.rank" :key="attendee.id" :data="attendee" />
+            <b-list-group-item v-if="show === attendee.rank" :key="attendee.id">
+              <AttendeeCard :data="attendee" />
+            </b-list-group-item>
           </div>
         </template>
-      </b-card-group>
-    </b-container>
+      </b-list-group>
+    </b-col>
   </div>
 </template>
 

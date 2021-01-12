@@ -3,15 +3,17 @@
     <h1 class="m-3">
       Causes
     </h1>
-    <b-container fluid>
-      <b-card-group deck>
+    <b-col md="4">
+      <b-list-group class="m-1">
         <template v-for="charity in charities">
           <div :key="charity.id">
-            <CharityCard :key="charity.id" :data="charity" />
+            <b-list-group-item :key="charity.id">
+              <CharityCard :data="charity" />
+            </b-list-group-item>
           </div>
         </template>
-      </b-card-group>
-    </b-container>
+      </b-list-group>
+    </b-col>
   </div>
 </template>
 

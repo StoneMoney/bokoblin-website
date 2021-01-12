@@ -3,7 +3,7 @@
     <b-navbar toggleable="lg" type="dark" variant="dark" sticky>
       <b-navbar-brand href="#">
         <nuxt-link to="/" class="unstyle">
-          <img src="~/static/bokoskull.svg" height="32px"> Bokoblin
+          <img src="~/static/bokoskull.svg" height="32px" alt="Boko Skull"> Bokoblin
         </nuxt-link>
       </b-navbar-brand>
 
@@ -11,26 +11,26 @@
 
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
-          <b-nav-item>
-            <nuxt-link to="/marathons" class="unstyle">
+          <nuxt-link to="/marathons" class="unstyle">
+            <div class="nav-link">
               Marathons
-            </nuxt-link>
-          </b-nav-item>
-          <b-nav-item>
-            <nuxt-link to="/attendees" class="unstyle">
+            </div>
+          </nuxt-link>
+          <nuxt-link to="/attendees" class="unstyle">
+            <div class="nav-link">
               Attendees
-            </nuxt-link>
-          </b-nav-item>
-          <b-nav-item>
-            <nuxt-link to="/games" class="unstyle">
+            </div>
+          </nuxt-link>
+          <nuxt-link to="/games" class="unstyle">
+            <div class="nav-link">
               Games
-            </nuxt-link>
-          </b-nav-item>
-          <b-nav-item>
-            <nuxt-link to="/causes" class="unstyle">
+            </div>
+          </nuxt-link>
+          <nuxt-link to="/causes" class="unstyle">
+            <div class="nav-link">
               Causes
-            </nuxt-link>
-          </b-nav-item>
+            </div>
+          </nuxt-link>
           <b-nav-item-dropdown text="Docs" right>
             <b-dropdown-item target="_blank" href="https://docs.google.com/spreadsheets/d/1nT8vmOsvK4eLEaIJfeT-tU0cPVSQ1-Ue5JpFk5sMXS8/edit#gid=1571767325">
               Current
@@ -79,28 +79,3 @@
     </b-navbar>
   </client-only>
 </template>
-
-<script>
-</script>
-
-<style>
-.unstyle {
-  color: inherit;
-}
-.unstyle:hover {
-  color: inherit;
-  text-decoration: inherit;
-}
-.unstyle:active {
-  color: inherit;
-  text-decoration: inherit;
-}
-.unstyle:link {
-  color: inherit;
-  text-decoration: inherit;
-}
-.unstyle:visited {
-  color: inherit;
-  text-decoration: inherit;
-}
-</style>
