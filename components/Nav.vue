@@ -37,6 +37,11 @@
                 Time Converter
               </nuxt-link>
             </b-dropdown-item>
+            <b-dropdown-item>
+              <nuxt-link to="/api" class="unstyle">
+                BokoAPI
+              </nuxt-link>
+            </b-dropdown-item>
           </b-nav-item-dropdown>
           <b-nav-item-dropdown text="Docs" right>
             <b-dropdown-item target="_blank" href="https://docs.google.com/spreadsheets/d/1nT8vmOsvK4eLEaIJfeT-tU0cPVSQ1-Ue5JpFk5sMXS8/edit#gid=1571767325">
