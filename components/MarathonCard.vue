@@ -1,6 +1,13 @@
 <template>
-  <div>
-    <b-card :sub-title="(new Date(data.start_date)).toLocaleString()" :style="'border-left: 10px solid #'+data.color">
+  <div class="mcard-container">
+    <div class="marathon-id" :style="'background-color: #'+data.color">
+      <nuxt-link :to="'/marathon/'+data.id">
+        <img v-if="data.type_id <= 2" :src="require('~/assets/marathon-rot/'+data.id+'.svg')" class="marathon-logo" :alt="data.full_name+' logo'">
+        <img v-else :src="require('~/assets/marathon-rot/'+(data.type_id*100)+'.png')" class="marathon-logo-broad" :alt="data.full_name+' logo'">
+      </nuxt-link>
+      <!-- <img src="~/assets/1.jpg"> -->
+    </div>
+    <b-card class="inline" :sub-title="(new Date(data.start_date)).toLocaleString()">
       <div class="marathonicon m-3">
         <img
           v-if="data.type_id === 1"
@@ -90,6 +97,27 @@ export default {
 }
 </script>
 <style scoped>
+.card {
+  border-radius: 0px .25rem .25rem 0px;
+}
+.mcard-container {
+  display: grid;
+  grid-template-columns: 35px 1fr;
+}
+.marathon-id {
+  border-radius: .25rem 0px 0px .25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+.marathon-logo {
+  height: 105px;
+  width: 35px;
+}
+.marathon-logo-broad {
+  width: 20px;
+}
 .marathonicon {
   position: absolute;
   top: 0;

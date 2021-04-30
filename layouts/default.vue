@@ -1,27 +1,44 @@
 <template>
   <div>
-    <Nav />
-    <Nuxt />
-    <b-container>
-      Bokoblin &copy; 2021 |
-      <nuxt-link to="/about">
-        About
-      </nuxt-link> |
-      <nuxt-link to="/api">
-        API
-      </nuxt-link> |
-      <a href="https://discord.gg/bUjNJ9j">
-        Discord
-      </a>
-    </b-container>
+    <SpotlightSearch v-if="spotlightVisible" @clear="spotlightVisible = false" />
+    <Nav :spotlight="spotlightVisible" @spotlight="spotlightVisible = true" />
+    <main>
+      <Nuxt />
+    </main>
+    <footer>
+      <b-container>
+        Bokoblin &copy; 2021 |
+        <nuxt-link to="/about">
+          About
+        </nuxt-link> |
+        <nuxt-link to="/api">
+          API
+        </nuxt-link> |
+        <a href="https://discord.gg/bUjNJ9j">
+          Discord
+        </a>
+      </b-container>
+    </footer>
   </div>
 </template>
 
 <script>
 import Nav from '../components/Nav'
+import SpotlightSearch from '../components/SpotlightSearch'
 export default {
   components: {
-    Nav
+    Nav,
+    SpotlightSearch
+  },
+  data () {
+    return {
+      spotlightVisible: false
+    }
+  },
+  watch: {
+    $route (to, from) {
+      this.spotlightVisible = false
+    }
   }
 }
 </script>

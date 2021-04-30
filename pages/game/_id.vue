@@ -43,9 +43,12 @@ export default {
     SegmentCard
   },
   async asyncData ({ $axios, params }) {
-    const game = (await $axios.$get('https://bokoblin.herokuapp.com/?query={game(id:' + params.id + '){id,title,isZelda,isEvent,segments{id,modifier,raised,game{id,title},marathon{full_name,color},runners{attendee{name,id,rank},runner_rank},filenames{filename,note},raised,start_time,end_time,vod,time_offset}}}')).data.game
+    const game = (await $axios.$get('https://bokoblin.herokuapp.com/?query={game(id:' + params.id + '){id,title,isZelda,isEvent,segments{id,modifier,raised,game{id,title},marathon{full_name,color,id},runners{attendee{name,id,rank},runner_rank},filenames{filename,note},raised,start_time,end_time,vod,time_offset}}}')).data.game
     const segments = game.segments
-    const raised = Math.ceil((segments.map(segment => parseFloat(segment.raised))).reduce((total, val) => { return total + val }) * 100) / 100
+    let raised = 0
+    if (segments.length > 0) {
+      raised = Math.ceil((segments.map(segment => parseFloat(segment.raised))).reduce((total, val) => { return total + val }) * 100) / 100
+    }
     return { game, segments, raised }
   },
   data () {

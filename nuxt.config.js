@@ -12,6 +12,7 @@ export default {
 
   // Global CSS (https://go.nuxtjs.dev/config-css)
   css: [
+    '~layouts/global.css'
   ],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
@@ -61,7 +62,7 @@ export default {
   },
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {
-    transpile: ['vue-youtube-embed'],
+    transpile: ['vue-youtube-embed', 'vue-instantsearch', 'instantsearch.js/es'],
     extend (config, { isClient }) {
       // Extend only webpack config for client-bundle
       if (isClient) {

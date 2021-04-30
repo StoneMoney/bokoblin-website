@@ -1,6 +1,6 @@
 <template>
   <div class="m-2">
-    <b-container>
+    <b-container role="banner">
       <b-card bg-variant="danger" class="text-light">
         <b-icon-exclamation-diamond-fill /> API IS IN BETA AND MAY CHANGE
       </b-card>

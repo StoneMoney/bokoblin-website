@@ -1,12 +1,12 @@
 <template>
   <b-row class="m-1">
-    <b-col class="m-3" sm="12" md="5">
+    <b-col sm="12" md="5">
       <h1>
         <b-badge :style="'background-color:#'+segment.marathon.color">
           {{ segment.marathon.id }}
         </b-badge> Marathon
       </h1>
-      <MarathonCard :key="'m'+segment.marathon.id" :data="segment.marathon" />
+      <MarathonCard :data="segment.marathon" />
       <h1>
         <b-badge>
           {{ segment.id }}
@@ -25,7 +25,7 @@
         </b-list-group-item>
       </b-list-group>
     </b-col>
-    <b-col v-if="segment.vod" class="pt-3" sm="12" md="6">
+    <b-col v-if="segment.vod" sm="12" md="6">
       <h1>VOD</h1>
       <b-card>
         <client-only placeholder="Loading...">
@@ -53,7 +53,7 @@ export default {
     MarathonCard
   },
   async asyncData ({ $axios, $luxon, params }) {
-    const segment = (await $axios.$get('https://bokoblin.herokuapp.com/?query={segment(id:' + params.id + '){id,game{title,id,isZelda,isEvent},modifier,runners{attendee{name,id,rank},runner_rank},filenames{filename,note},raised,start_time,end_time,vod,time_offset,marathon{id,color,full_name,slug,type_id,total,start_date,playlist,charity{id,full_name}}}}')).data.segment
+    const segment = (await $axios.$get('https://bokoblin.herokuapp.com/?query={segment(id:' + params.id + '){id,game{title,id,isZelda,isEvent},modifier,runners{attendee{name,id,rank},runner_rank},filenames{filename,note},raised,start_time,end_time,vod,time_offset,marathon{id,color,full_name,slug,type,type_id,total,start_date,playlist,charity{id,full_name}}}}')).data.segment
     const currentPage = segment.id
     return { segment, currentPage }
   },

@@ -1,82 +1,89 @@
 scalar DateTime
+  
+  type Attendance {
+    attendee: Attendee!,
+    marathon: Marathon!,
+    award: String,
+    present: Boolean!
+  }
 
-type Attendee {
-  id: ID!,
-  name: String,
-  rank: String,
-  house: String,
-  house_color: String
-  segments: [Segment]!
-}
+  type Attendee {
+    id: ID!,
+    name: String,
+    rank: String,
+    house: String,
+    house_color: String,
+    segments: [Segment]!,
+    attendance: [Attendance]
+  }
 
-type Runner {
-  attendee: Attendee!,
-  runner_rank: Int!
-}
+  type Runner {
+    attendee: Attendee!,
+    runner_rank: Int!
+  }
 
-type Game {
-  id: ID!,
-  title: String,
-  segments: [Segment]!,
-  isZelda: Boolean,
-  isEvent: Boolean
-}
+  type Game {
+    id: ID!,
+    title: String,
+    segments: [Segment]!,
+    isZelda: Boolean,
+    isEvent: Boolean
+  }
 
-type Charity {
-  id: ID!,
-  slug: String,
-  full_name: String,
-  website: String,
-  total: String
-}
+  type Charity {
+    id: ID!,
+    slug: String,
+    full_name: String,
+    website: String,
+    total: String
+  }
 
-type Marathon {
-  id: ID!,
-  type: String,
-  type_id: Int,
-  slug: String,
-  full_name: String,
-  total: String,
-  start_date: DateTime,
-  stop_date: DateTime,
-  playlist: String,
-  charity: Charity,
-  color: String,
-  segments: [Segment]!,
-  runners: [Runner]!
-}
+  type Marathon {
+    id: ID!,
+    type: String,
+    type_id: Int,
+    slug: String,
+    full_name: String,
+    total: String,
+    start_date: DateTime,
+    stop_date: DateTime,
+    playlist: String,
+    charity: Charity,
+    color: String,
+    segments: [Segment]!,
+    runners: [Runner]!,
+    attendance: [Attendance]
+  }
 
-type Filename {
-  segment_id: ID!,
-  filename: String,
-  note: String
-}
+  type Filename {
+    segment_id: ID!,
+    filename: String,
+    note: String
+  }
 
-type Segment {
-  id: ID!,
-  marathon: Marathon,
-  game: Game,
-  modifier: String,
-  raised: String,
-  start_time: DateTime,
-  end_time: DateTime,
-  vod: String,
-  time_offset: Int,
-  runners: [Runner],
-  filenames: [Filename]
-}
-# The "Query" type is special: it lists all of the available queries that
-# clients can execute, along with the return type for each. In this
-# case, the "books" query returns an array of zero or more Books (defined above).
-type Query {
-  attendees: [Attendee],
-  attendee(id: Int!): Attendee,
-  charities: [Charity],
-  charity(id: Int!): Charity,
-  games: [Game],
-  game(id: Int!): Game,
-  marathons(id: Int): [Marathon],
-  marathon(id: Int!): Marathon,
-  segment(id: Int!): Segment,
-  segments(method: String!, id: Int!): [Segment],
-}
+  type Segment {
+    id: ID!,
+    marathon: Marathon,
+    game: Game,
+    modifier: String,
+    raised: String,
+    start_time: DateTime,
+    end_time: DateTime,
+    vod: String,
+    time_offset: Int,
+    runners: [Runner],
+    filenames: [Filename]
+  }
+
+  type Query {
+    attendees: [Attendee],
+    attendee(id: Int!): Attendee,
+    charities: [Charity],
+    charity(id: Int!): Charity,
+    games: [Game],
+    game(id: Int!): Game,
+    marathons(id: Int): [Marathon],
+    marathon(id: Int!): Marathon,
+    segment(id: Int!): Segment,
+    segments(method: String!, id: Int!): [Segment],
+  }

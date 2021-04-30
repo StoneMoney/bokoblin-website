@@ -1,95 +1,154 @@
 <template>
   <div>
-    <h1 class="m-3">
-      <b-badge :style="'background-color:#'+attendee.house_color">
-        {{ attendee.id }}
-      </b-badge>
-      <img
-        v-if="attendee.house === 'Courage'"
-        v-b-tooltip.hover
-        src="~/static/courage.svg"
-        width="28px"
-        class="text-right"
-        title="Team Courage"
-        alt="Courage"
-      >
-      <img
-        v-if="attendee.house === 'Wisdom'"
-        v-b-tooltip.hover
-        src="~/static/wisdom.svg"
-        width="28px"
-        class="text-right"
-        title="Team Wisdom"
-        alt="Wisdom"
-      >
-      <img
-        v-if="attendee.house === 'Power'"
-        v-b-tooltip.hover
-        src="~/static/power.svg"
-        width="28px"
-        class="text-right"
-        title="Team Power"
-        alt="Power"
-      >
-      {{ attendee.name }}
-    </h1>
-    <b-col sm="9" md="4">
-      <b-list-group class="m-1">
-        <b-list-group-item class="d-flex justify-content-between align-items-center">
-          Status (rank): {{ attendee.rank }}
-        </b-list-group-item>
-        <b-list-group-item v-if="raised > 0" class="d-flex justify-content-between align-items-center">
-          Raised: {{ toUSD(raised) }}
-        </b-list-group-item>
-      </b-list-group>
-    </b-col>
-    <h1 class="m-3">
-      Segments ({{ segments.length }})
-    </h1>
-    <b-col class="mb-2">
-      <b-nav pills>
-        <b-nav-item :active="show === 0" :disabled="gameplaySegments.length == 0" @click="show = 0">
-          <b-icon-controller /> Gameplay <b-badge pill :variant="show === 0 ? 'light' : 'secondary'">
-            {{ gameplaySegments.length }}
+    <b-row class="m-1">
+      <b-col md="3">
+        <h1 class="mb-3">
+          <b-badge :style="'background-color:#'+attendee.house_color">
+            {{ attendee.id }}
           </b-badge>
-        </b-nav-item>
-        <b-nav-item :active="show === 1" :disabled="commentarySegments.length == 0" @click="show = 1">
-          <b-icon-mic /> Commentary <b-badge pill :variant="show === 1 ? 'light' : 'secondary'">
-            {{ commentarySegments.length }}
-          </b-badge>
-        </b-nav-item>
-      </b-nav>
-    </b-col>
-    <span v-if="show == 0">
-      <template v-for="segment in gameplaySegments">
-        <b-col
-          :key="segment.id"
-          md="7"
-          lg="6"
-          xl="5"
-          class="mb-3"
-        >
-          <SegmentCard :data="segment" />
-        </b-col>
-      </template>
-    </span>
-    <span v-else-if="show == 1">
+          <img
+            v-if="attendee.house === 'Courage'"
+            v-b-tooltip.hover
+            src="~/static/courage.svg"
+            width="28px"
+            class="text-right"
+            title="Team Courage"
+            alt="Courage"
+          >
+          <img
+            v-if="attendee.house === 'Wisdom'"
+            v-b-tooltip.hover
+            src="~/static/wisdom.svg"
+            width="28px"
+            class="text-right"
+            title="Team Wisdom"
+            alt="Wisdom"
+          >
+          <img
+            v-if="attendee.house === 'Power'"
+            v-b-tooltip.hover
+            src="~/static/power.svg"
+            width="28px"
+            class="text-right"
+            title="Team Power"
+            alt="Power"
+          >
+          {{ attendee.name }}
+        </h1>
+        <b-list-group>
+          <b-list-group-item class="d-flex justify-content-between align-items-center">
+            Status (rank): {{ attendee.rank }}
+          </b-list-group-item>
+          <b-list-group-item v-if="raised > 0" class="d-flex justify-content-between align-items-center">
+            Raised: {{ toUSD(raised) }}
+          </b-list-group-item>
+        </b-list-group>
+        <span v-if="(attendee.flagshipAttendance.length + attendee.otherAttendance.length) > 0">
+          <h2>Attendance</h2>
+          <span v-if="attendee.flagshipAttendance.length > 0">
+            <div class="trophy">
+              <img src="~/static/Trophy_Top.svg" alt="trophy top, a triforce">
+            </div>
+            <template v-for="attended in attendee.flagshipAttendance">
+              <div v-if="attended.marathon.id < 100" :key="attended.marathon.id" v-b-tooltip.hover.right="attended.award ? '&quot;'+attended.award+'&quot; award' : 'Attendee'" class="attendance-item" :style="'background-color:#'+attended.marathon.color">
+                <nuxt-link :to="'/marathon/'+attended.marathon.id" class="unstyledx">
+                  <b-icon-controller v-if="attended.runner" v-b-tooltip="'Game Runner'" />
+                  <img :src="require('~/assets/marathon/'+attended.marathon.id+'.svg')" class="marathon-logo" :alt="attended.marathon.slug">
+                  <span v-if="attended.present == 0" v-b-tooltip.hover.bottom="'Recieved award, but was not present at marathon'">*</span>
+                </nuxt-link>
+              </div>
+            </template>
+            <div class="trophy">
+              <img src="~/static/Trophy_Bottom.svg" alt="trophy bottom, a Zeldathon logo">
+            </div>
+          </span>
+          <div class="attendance-other-shelf">
+            <template v-for="attended in attendee.otherAttendance">
+              <div v-if="attended.marathon.id > 100" :key="attended.marathon.id" v-b-tooltip.hover.bottom="attended.marathon.full_name + ' Participant'" class="attendance-other" :style="'background-color:#'+attended.marathon.color">
+                <nuxt-link :to="'/marathon/'+attended.marathon.id" class="unstyledx">
+                  <img
+                    v-if="attended.marathon.type === 'Flagship'"
+                    src="~/static/1.svg"
+                    width="24px"
+                    alt="Z"
+                  >
+                  <img
+                    v-else-if="attended.marathon.type === 'Flagship Mini'"
+                    src="~/static/1.svg"
+                    width="24px"
+                    alt="Z"
+                  >
+                  <img
+                    v-else-if="attended.marathon.type === 'Parallel Worlds'"
+                    src="~/static/3.svg"
+                    width="24px"
+                    alt="PW"
+                  >
+                  <img
+                    v-else-if="attended.marathon.type === 'Side Quest'"
+                    src="~/static/4.svg"
+                    width="24px"
+                    alt="SQ"
+                  >
+                  <img
+                    v-else-if="attended.marathon.type === 'Piece of Heart'"
+                    src="~/static/5.svg"
+                    width="24px"
+                    alt="PoH"
+                  >
+                  <span v-if="attended.present == 0" v-b-tooltip.hover.bottom="'Was not present at marathon'">*</span>
+                </nuxt-link>
+              </div>
+            </template>
+          </div>
+        </span>
+      </b-col>
+      <b-col>
+        <span v-if="segments.length > 0">
+          <div class="mb-2">
+            <h1>
+              Segments ({{ segments.length }})
+            </h1>
+            <b-nav pills>
+              <b-nav-item :active="show === 0" :disabled="gameplaySegments.length == 0" @click="show = 0">
+                <b-icon-controller /> Gameplay <b-badge pill :variant="show === 0 ? 'light' : 'secondary'">
+                  {{ gameplaySegments.length }}
+                </b-badge>
+              </b-nav-item>
+              <b-nav-item :active="show === 1" :disabled="commentarySegments.length == 0" @click="show = 1">
+                <b-icon-mic /> Commentary <b-badge pill :variant="show === 1 ? 'light' : 'secondary'">
+                  {{ commentarySegments.length }}
+                </b-badge>
+              </b-nav-item>
+            </b-nav>
+          </div>
+          <span v-if="show == 0">
+            <template v-for="segment in gameplaySegments">
+              <div
+                :key="segment.id"
+                class="mb-3"
+              >
+                <SegmentCard :data="segment" />
+              </div>
+            </template>
+          </span>
+          <span v-else-if="show == 1">
 
-      <template v-for="segment in commentarySegments">
-        <b-col
-          :key="segment.id"
-          md="7"
-          lg="6"
-          xl="5"
-          class="mb-3"
-        >
-          <SegmentCard :data="segment" />
-        </b-col>
-      </template>
-    </span>
-    <b-col v-else>
-      <h3>There are no records of segments played by this attendee</h3>
-    </b-col>
+            <template v-for="segment in commentarySegments">
+              <div
+                :key="segment.id"
+                class="mb-3"
+              >
+                <SegmentCard :data="segment" />
+              </div>
+            </template>
+          </span>
+        </span>
+        <h3 v-else>
+          There are no records of segments played by this attendee
+        </h3>
+      </b-col>
+    </b-row>
   </div>
 </template>
 
@@ -103,35 +162,120 @@ export default {
     BIconMic
   },
   async asyncData ({ $axios, params }) {
-    const attendee = (await $axios.$get('https://bokoblin.herokuapp.com/?query={attendee(id:' + params.id + '){id,name,house,house_color,rank,segments{id,game{title,id,isZelda,isEvent},modifier,marathon{id,full_name,color},runners{attendee{name,id,rank},runner_rank},filenames{filename,note},raised,start_time,end_time,vod,time_offset}}}')).data.attendee
+    const attendee = (
+      await $axios.$get(
+        'https://bokoblin.herokuapp.com/?query={attendee(id:' +
+          params.id +
+          '){id,name,house,house_color,rank,attendance{present,award,marathon{id,slug,full_name,color,type}},segments{id,game{title,id,isZelda,isEvent},modifier,marathon{id,full_name,slug,color,type},runners{attendee{name,id,rank},runner_rank},filenames{filename,note},raised,start_time,end_time,vod,time_offset}}}'
+      )
+    ).data.attendee
     const segments = attendee.segments
-    if (segments.length > 0) {
-      const commentarySegments = []
-      const gameplaySegments = []
-      let show = 0
-      segments.map((segment) => {
-        switch (segment.runners.filter((r, i) => { return r.attendee.id === attendee.id })[0].runner_rank) {
-          case 0:
-          case 2:
-            gameplaySegments.push(segment)
-            break
-          case 1:
-            commentarySegments.push(segment)
-            break
-        }
-      })
-      const raised = Math.ceil((segments.map(segment => parseFloat(segment.raised))).reduce((total, val) => { return total + val }) * 100) / 100
-      if (gameplaySegments.length === 0 && commentarySegments.length > 0) {
-        show = 1
+    const commentarySegments = []
+    const gameplaySegments = []
+    let show = 0
+    const marathons = segments.map((segment) => {
+      return segment.marathon
+    })
+    segments.map((segment) => {
+      switch (
+        segment.runners.filter((r, i) => {
+          return r.attendee.id === attendee.id
+        })[0].runner_rank
+      ) {
+        case 0:
+        case 2:
+          gameplaySegments.push(segment)
+          break
+        case 1:
+          commentarySegments.push(segment)
+          break
       }
-      return { attendee, segments, gameplaySegments, commentarySegments, raised, show }
+    })
+    let raised = 0
+    if (segments.length > 0) {
+      raised =
+        Math.ceil(
+          segments
+            .map(segment => parseFloat(segment.raised))
+            .reduce((total, val) => {
+              return total + val
+            }) * 100
+        ) / 100
     }
-    return { attendee }
+    if (gameplaySegments.length === 0 && commentarySegments.length > 0) {
+      show = 1
+    }
+    // Get array of all marathons present within segments, eliminating repeats
+    const allIds = marathons.map(el => parseInt(el.id))
+    const marathonsWithSegments = allIds.filter((c, index) => {
+      return allIds.indexOf(c) === index
+    })
+    // Create another method with the same list that will later be shrunk as the attendance object is merged
+    let marathonsWithSegmentsWithoutAttendance = marathonsWithSegments
+    const flagshipAttendanceObj = []
+    const otherAttendanceObj = []
+    // For every attendance object....
+    attendee.attendance.forEach(function (attended) {
+      // See if a segment was run in that marathon to match
+      if (marathonsWithSegments.includes(parseInt(attended.marathon.id))) {
+        // Attribute a runner credit
+        attended.runner = true
+        // Remove marathon ID from list of marathons that DO NOT have an attendance credit
+        marathonsWithSegmentsWithoutAttendance = marathonsWithSegmentsWithoutAttendance.filter(
+          function (value) {
+            return value !== parseInt(attended.marathon.id)
+          }
+        )
+        // No segment for this marathon
+      } else {
+        attended.runner = false
+      }
+      if (parseInt(attended.marathon.id) < 100) {
+        flagshipAttendanceObj.push(attended)
+      } else {
+        otherAttendanceObj.push(attended)
+      }
+    })
+    // Every marathon WITH a run but did not have any attendance credit
+    marathonsWithSegmentsWithoutAttendance.forEach(function (noseg) {
+      const att = {
+        present: 1,
+        runner: true,
+        marathon: marathons.find(element => parseInt(element.id) === noseg),
+        award: ''
+      }
+      if (parseInt(att.marathon.id) < 100) {
+        flagshipAttendanceObj.push(att)
+      } else {
+        otherAttendanceObj.push(att)
+      }
+    })
+    // Sort marathon attendance by highest ID first
+    flagshipAttendanceObj.sort((b, a) => {
+      return a.marathon.id - b.marathon.id
+    })
+    // Sort marathon attendance by highest ID first
+    otherAttendanceObj.sort((b, a) => {
+      return a.marathon.id - b.marathon.id
+    })
+    // Add to our attendee object
+    attendee.flagshipAttendance = flagshipAttendanceObj
+    attendee.otherAttendance = otherAttendanceObj
+    return {
+      attendee,
+      segments,
+      gameplaySegments,
+      commentarySegments,
+      raised,
+      show,
+      marathons
+    }
   },
   data ({ params }) {
     return {
       attendee: {},
       segments: [],
+      marathons: [],
       gameplaySegments: [],
       commentarySegments: [],
       raised: 0,
@@ -145,10 +289,10 @@ export default {
       const duration = stopDate - startDate
       let seconds = parseInt((duration / 1000) % 60)
       let minutes = parseInt((duration / (1000 * 60)) % 60)
-      let hours = parseInt((duration / (1000 * 60 * 60)))
-      hours = (hours < 10 && hours >= 0) ? '0' + hours : hours
-      minutes = (minutes < 10 && minutes >= 0) ? '0' + minutes : minutes
-      seconds = (seconds < 10 && seconds >= 0) ? '0' + seconds : seconds
+      let hours = parseInt(duration / (1000 * 60 * 60))
+      hours = hours < 10 && hours >= 0 ? '0' + hours : hours
+      minutes = minutes < 10 && minutes >= 0 ? '0' + minutes : minutes
+      seconds = seconds < 10 && seconds >= 0 ? '0' + seconds : seconds
       return hours + ':' + minutes + ':' + seconds
     },
     getDurationNumberal (start, stop) {
@@ -157,7 +301,7 @@ export default {
       const duration = stopDate - startDate
       let seconds = parseInt((duration / 1000) % 60)
       let minutes = parseInt((duration / (1000 * 60)) % 60)
-      let hours = parseInt((duration / (1000 * 60 * 60)))
+      let hours = parseInt(duration / (1000 * 60 * 60))
       hours = hours / 24
       minutes = minutes / 1440
       seconds = seconds / 86400
@@ -167,9 +311,14 @@ export default {
       const number = input.toString()
       let dollars = number.split('.')[0]
       const cents = (number.split('.')[1] || '') + '00'
-      dollars = dollars.split('').reverse().join('')
+      dollars = dollars
+        .split('')
+        .reverse()
+        .join('')
         .replace(/(\d{3}(?!$))/g, '$1,')
-        .split('').reverse().join('')
+        .split('')
+        .reverse()
+        .join('')
       return '$' + dollars + '.' + cents.slice(0, 2)
     }
   },
@@ -181,7 +330,13 @@ export default {
         {
           hid: 'description',
           name: 'description',
-          content: 'Bokoblin archive data for ' + this.attendee.name + (this.segments.length > 0 ? ', including ' + this.segments.length + ' segments' : '') + '.'
+          content:
+            'Bokoblin archive data for ' +
+            this.attendee.name +
+            (this.segments.length > 0
+              ? ', including ' + this.segments.length + ' segments'
+              : '') +
+            '.'
         },
         {
           hid: 'og:title',
@@ -191,7 +346,13 @@ export default {
         {
           hid: 'og:description',
           property: 'og:description',
-          content: 'Bokoblin archive data for ' + this.attendee.name + (this.segments.length > 0 ? ', including ' + this.segments.length + ' segments' : '') + '.'
+          content:
+            'Bokoblin archive data for ' +
+            this.attendee.name +
+            (this.segments.length > 0
+              ? ', including ' + this.segments.length + ' segments'
+              : '') +
+            '.'
         },
         {
           hid: 'theme-color',
@@ -203,3 +364,52 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.attendance-item {
+  font-weight: bolder;
+  font-style: italic;
+  font-size: 1.2rem;
+  padding: 5px 0px 5px 0px;
+  color: white;
+  text-align: center;
+  text-transform: uppercase;
+  max-width: 190px;
+  margin-left: auto;
+  margin-right: auto;
+  cursor: pointer;
+}
+.trophy {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+.trophy img {
+  max-width: 220px;
+}
+.attendance-other-shelf {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.attendance-other {
+  border-radius: 50px;
+  font-size: 1.2rem;
+  padding: 10px;
+  margin: 10px;
+  color: white;
+  text-align: center;
+  text-transform: uppercase;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+}
+.attendance-other img {
+  filter: invert();
+}
+.marathon-logo {
+  height: 30px;
+  width: 110px;
+}
+</style>

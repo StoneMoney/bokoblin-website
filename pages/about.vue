@@ -10,7 +10,7 @@
       </p>
       <h2>Credits</h2>
       <p>
-        <b>Development:</b> Stone
+        <b>Development:</b> Stone (@ngiano - github)
       </p>
       <p>
         <b>Design:</b> dark

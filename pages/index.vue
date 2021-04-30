@@ -1,8 +1,9 @@
 <template>
   <b-container class="mx-auto m-3">
+    <countdown-card v-if="haveCountdown" :marathon="marathon" :start-date="startDate" />
     <b-jumbotron bg-variant="dark">
       <template #header>
-        <b-container class="mx-auto m-3 text-center">
+        <b-container class="mx-auto m-3 text-center text-light">
           <img src="~/static/bokoblin.svg" width="50%" alt="Logo">
         </b-container>
       </template>
@@ -36,6 +37,19 @@
       </template>
 
       <hr class="my-4">
+      <b-container class="mx-auto text-center m-3">
+        <p class="text-light">
+          Power up your event viewing experience with the <b>Bokoblin Browser Extension</b>
+          <br>
+          <nuxt-link to="/tools/extension">
+            <b-button variant="danger" size="mb-1">
+              Learn More
+            </b-button>
+          </nuxt-link>
+        </p>
+      </b-container>
+
+      <hr class="my-4">
 
       <p class="text-light">
         Looking for the Google Sheet documents for the marathons?
@@ -64,7 +78,23 @@
 </template>
 
 <script>
+import CountdownCard from '~/components/CountdownCard.vue'
 export default {
+  components: { CountdownCard },
+  async asyncData ({ $axios, params }) {
+    const marathon = (await $axios.$get('https://bokoblin.herokuapp.com/?query={marathon(id:403){id,color,type,type_id,total,full_name,start_date,charity{id,slug,website}}}')).data.marathon
+    const startDate = new Date(marathon.start_date)
+    const haveCountdown = (new Date().getTime() < startDate.getTime())
+    return { marathon, startDate, haveCountdown }
+  },
+  data () {
+    return {
+      marathon: {},
+      startDate: new Date(),
+      haveCountdown: false,
+      countdown: '--:--:--'
+    }
+  },
   head () {
     return {
       title: 'Bokoblin',

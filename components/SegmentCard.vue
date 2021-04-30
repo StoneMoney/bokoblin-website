@@ -23,7 +23,7 @@
         </nuxt-link>
       </template>
       <b-card-title>
-        <nuxt-link :to="'/game/'+data.game.id">
+        <nuxt-link :to="'/game/'+data.game.id" :style="(data.game.title == 'podcast' ? 'font-family:cursive;' : '')">
           {{ data.game.title }}
         </nuxt-link>
         <h6>{{ data.modifier }}</h6>
