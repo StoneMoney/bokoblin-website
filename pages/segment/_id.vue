@@ -1,47 +1,63 @@
 <template>
-  <b-row class="m-1">
-    <b-col sm="12" md="5">
-      <h1>
-        <b-badge :style="'background-color:#'+segment.marathon.color">
-          {{ segment.marathon.id }}
-        </b-badge> Marathon
-      </h1>
-      <MarathonCard :data="segment.marathon" />
-      <h1>
-        <b-badge>
-          {{ segment.id }}
-        </b-badge> Segment
-      </h1>
-      <SegmentCard :key="segment.id" :data="segment" />
-      <b-list-group class="mt-3">
-        <b-list-group-item class="d-flex justify-content-between align-items-center">
-          Start time: {{ (new Date(segment.start_time)).toLocaleString() }} ({{ getDuration(segment.marathon.start_date,segment.start_time) }})
-        </b-list-group-item>
-        <b-list-group-item class="d-flex justify-content-between align-items-center">
-          End time: {{ (new Date(segment.end_time)).toLocaleString() }} ({{ getDuration(segment.marathon.start_date,segment.end_time) }})
-        </b-list-group-item>
-        <b-list-group-item class="d-flex justify-content-between align-items-center">
-          Raised: {{ toUSD(parseFloat(segment.raised) / getDurationNumberal(segment.start_time,segment.end_time)) }}/hr
-        </b-list-group-item>
-      </b-list-group>
-    </b-col>
-    <b-col v-if="segment.vod" sm="12" md="6">
-      <h1>VOD</h1>
-      <b-card>
-        <client-only placeholder="Loading...">
-          <youtube
-            :player-vars="{
-              start: segment.time_offset,
-              listType: 'playlist',
-              list: segment.marathon.playlist
-            }"
-            player-width="100%"
-            :video-id="segment.vod"
-          />
-        </client-only>
-      </b-card>
-    </b-col>
-  </b-row>
+  <div>
+    <span v-if="$fetchState.pending" key="pending">
+      <b-container class="loading-zone text-center">
+        <b-spinner style="width: 7rem; height: 7rem;margin-left: auto;margin-right:auto;" variant="danger" type="grow" label="Spinning" />
+        <h1 class="text-grey mt-2">
+          Loading
+        </h1>
+      </b-container>
+    </span>
+    <span v-else-if="$fetchState.error" key="errored">
+      Error in Fetching...
+    </span>
+    <span v-else key="success">
+      <b-row class="m-1">
+        <b-col sm="12" md="5">
+          <h1>
+            <b-badge :style="'background-color:#'+segment.marathon.color">
+              {{ segment.marathon.id }}
+            </b-badge> Marathon
+          </h1>
+          <MarathonCard :data="segment.marathon" />
+          <h1>
+            <b-badge>
+              {{ segment.id }}
+            </b-badge> Segment
+          </h1>
+          <SegmentCard :key="segment.id" :data="segment" />
+          <b-list-group class="mt-3">
+            <b-list-group-item class="d-flex justify-content-between align-items-center">
+              Start time: {{ (new Date(segment.start_time)).toLocaleString() }} ({{ getDuration(segment.marathon.start_date,segment.start_time) }})
+            </b-list-group-item>
+            <b-list-group-item class="d-flex justify-content-between align-items-center">
+              End time: {{ (new Date(segment.end_time)).toLocaleString() }} ({{ getDuration(segment.marathon.start_date,segment.end_time) }})
+            </b-list-group-item>
+            <b-list-group-item class="d-flex justify-content-between align-items-center">
+              Raised: {{ toUSD(parseFloat(segment.raised) / getDurationNumberal(segment.start_time,segment.end_time)) }}/hr
+            </b-list-group-item>
+          </b-list-group>
+        </b-col>
+        <b-col v-if="segment.vod" sm="12" md="7">
+          <h1>VOD</h1>
+          <b-card>
+            <client-only placeholder="Loading...">
+              <youtube
+                :player-vars="{
+                  start: segment.time_offset,
+                  listType: 'playlist',
+                  list: segment.marathon.playlist
+                }"
+                player-width="100%"
+                player-height="480px"
+                :video-id="segment.vod"
+              />
+            </client-only>
+          </b-card>
+        </b-col>
+      </b-row>
+    </span>
+  </div>
 </template>
 
 <script>
@@ -52,10 +68,23 @@ export default {
     SegmentCard,
     MarathonCard
   },
-  async asyncData ({ $axios, $luxon, params }) {
-    const segment = (await $axios.$get('https://bokoblin.herokuapp.com/?query={segment(id:' + params.id + '){id,game{title,id,isZelda,isEvent},modifier,runners{attendee{name,id,rank},runner_rank},filenames{filename,note},raised,start_time,end_time,vod,time_offset,marathon{id,color,full_name,slug,type,type_id,total,start_date,playlist,charity{id,full_name}}}}')).data.segment
-    const currentPage = segment.id
-    return { segment, currentPage }
+  async fetch () {
+    this.segment = (await this.$axios.$get(`https://api.bokoblin.com/?query={segment(id:${this.$route.params.id}){id,game{title,id,isZelda,isEvent},modifier,runners{attendee{name,id,rank},runner_rank},filenames{filename,note},raised,start_time,end_time,vod,time_offset,marathon{id,color,full_name,slug,type,type_id,total,start_date,stop_date,playlist,charity{id,full_name}}}}`)).data.segment
+    if (!this.segment) {
+      // set status code on server and
+      if (process.server) {
+        this.$nuxt.context.res.statusCode = 404
+      }
+      // use throw new Error()
+      this.$nuxt.context.error({
+        status: 404,
+        message: 'Could not find segment with id of ' + this.$route.params.id
+      })
+      throw new Error('404')
+    } else {
+      this.currentPage = this.segment.id
+      // without this, the head() doesn't work. Don't ask why
+    }
   },
   data () {
     return {
@@ -90,16 +119,25 @@ export default {
       return (hours + minutes + seconds) * 24
     },
     toUSD (input) {
-      const number = input.toString()
-      let dollars = number.split('.')[0]
-      const cents = (number.split('.')[1] || '') + '00'
-      dollars = dollars.split('').reverse().join('')
-        .replace(/(\d{3}(?!$))/g, '$1,')
-        .split('').reverse().join('')
-      return '$' + dollars + '.' + cents.slice(0, 2)
+      return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(input)
     }
   },
   head () {
+    if (this.$fetchState.pending) {
+      return {
+        title: 'Loading - Bokoblin'
+      }
+    }
+    if (this.$fetchState.error) {
+      return {
+        title: '404 - Bokoblin'
+      }
+    }
+    // Strange issues with not being able to find inner-objects when using a nuxt-link
+    // Meta-data is pointless for this state
+    if (!this.segment.marathon) {
+      return {}
+    }
     if (this.segment.vod) {
       return {
         title: this.segment.game.title + ' @ ' + this.segment.marathon.slug + ' - Bokoblin',

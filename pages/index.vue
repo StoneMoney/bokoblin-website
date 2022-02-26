@@ -18,6 +18,11 @@
               Marathons
             </b-button>
           </nuxt-link>
+          <nuxt-link to="/sounds">
+            <b-button variant="danger" size="lg mb-1">
+              Secret Sounds
+            </b-button>
+          </nuxt-link>
           <nuxt-link to="/attendees">
             <b-button variant="danger" size="lg mb-1">
               Attendees
@@ -36,18 +41,18 @@
         </b-container>
       </template>
 
-      <hr class="my-4">
+      <!-- <hr class="my-4">
       <b-container class="mx-auto text-center m-3">
         <p class="text-light">
-          Power up your event viewing experience with the <b>Bokoblin Browser Extension</b>
+          Now available for open beta testing: <b>Bokoblin Mobile</b>
           <br>
-          <nuxt-link to="/tools/extension">
+          <nuxt-link to="/tools/mobileapp">
             <b-button variant="danger" size="mb-1">
-              Learn More
+              Available on Android
             </b-button>
           </nuxt-link>
         </p>
-      </b-container>
+      </b-container> -->
 
       <hr class="my-4">
 
@@ -73,16 +78,21 @@
       <b-button variant="secondary" href="https://docs.google.com/spreadsheets/d/13Zh1ovK_7zBIk_bCEMeTosv3jf9asegRTQyCTCC3O58/" class="mb-1">
         Graphs
       </b-button>
+      <p class="text-light">
+        Looking for a different Doc Team marathon? Pokethon, TRG, Mario Masters... scroll down!
+      </p>
     </b-jumbotron>
+    <AffiliatedEvents />
   </b-container>
 </template>
 
 <script>
 import CountdownCard from '~/components/CountdownCard.vue'
+import AffiliatedEvents from '~/components/AffiliatedEventsJumbotron.vue'
 export default {
-  components: { CountdownCard },
+  components: { CountdownCard, AffiliatedEvents },
   async asyncData ({ $axios, params }) {
-    const marathon = (await $axios.$get('https://bokoblin.herokuapp.com/?query={marathon(id:403){id,color,type,type_id,total,full_name,start_date,charity{id,slug,website}}}')).data.marathon
+    const marathon = (await $axios.$get('https://api.bokoblin.com/?query={marathon(id:26){id,color,type,type_id,total,full_name,start_date,charity{id,slug,website}}}')).data.marathon
     const startDate = new Date(marathon.start_date)
     const haveCountdown = (new Date().getTime() < startDate.getTime())
     return { marathon, startDate, haveCountdown }
@@ -91,7 +101,7 @@ export default {
     return {
       marathon: {},
       startDate: new Date(),
-      haveCountdown: false,
+      haveCountdown: true,
       countdown: '--:--:--'
     }
   },

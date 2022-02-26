@@ -26,8 +26,8 @@
         <nuxt-link :to="'/game/'+data.game.id" :style="(data.game.title == 'podcast' ? 'font-family:cursive;' : '')">
           {{ data.game.title }}
         </nuxt-link>
-        <h6>{{ data.modifier }}</h6>
       </b-card-title>
+      <h6>{{ data.modifier }}</h6>
       <b-card-sub-title v-if="$route.name == 'attendee-id' || $route.name == 'game-id'">
         <span><nuxt-link :to="'/marathon/'+data.marathon.id" class="unstyle">@ {{ data.marathon.full_name }}</nuxt-link></span>
       </b-card-sub-title>
@@ -134,13 +134,7 @@ export default {
       return hours + ':' + minutes + ':' + seconds
     },
     toUSD (input) {
-      const number = input.toString()
-      let dollars = number.split('.')[0]
-      const cents = (number.split('.')[1] || '') + '00'
-      dollars = dollars.split('').reverse().join('')
-        .replace(/(\d{3}(?!$))/g, '$1,')
-        .split('').reverse().join('')
-      return '$' + dollars + '.' + cents.slice(0, 2)
+      return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(input)
     }
   }
 }

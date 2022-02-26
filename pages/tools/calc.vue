@@ -1,55 +1,70 @@
 <template>
   <div>
-    <b-container>
-      <h1 class="m-3">
-        Donation Calculator
-      </h1>
-      <h4 class="m-3">
-        No active marathon, using last marathon's donation total: {{ formatMoney(total) }}
-      </h4>
-      <h6 class="m-3">
-        Powered by <a href="https://0rganics.org">0rganic's</a> original functions
-      </h6>
-    </b-container>
-    <b-container>
-      <table class="table">
-        <tbody>
-          <tr>
-            <th scope="col">
-              Type
-            </th>
-            <th scope="col">
-              Previewed Total
-            </th>
-            <th scope="col">
-              Donation Required
-            </th>
-          </tr>
-          <template v-for="calc in calced">
-            <tr :key="calc.name+calc.total">
-              <td>{{ calc.name }}</td>
-              <td>{{ formatMoney(calc.total) }}</td>
-              <td>{{ formatMoney(calc.donation) }}</td>
+    <span v-if="$fetchState.pending" key="pending">
+      <b-container class="loading-zone text-center">
+        <b-spinner style="width: 7rem; height: 7rem;margin-left: auto;margin-right:auto;" variant="danger" type="grow" label="Spinning" />
+        <h1 class="text-grey mt-2">
+          Loading
+        </h1>
+      </b-container>
+    </span>
+    <span v-else-if="$fetchState.error" key="errored">
+      Error in Fetching...
+      <br>The calculator is still under development
+      <br>5/21/21 - Stone
+    </span>
+    <span v-else key="success">
+      <b-container>
+        <h1 class="m-3">
+          Donation Calculator
+        </h1>
+        <h4 class="m-3">
+          No active marathon, using last marathon's donation total: {{ formatMoney(total) }}
+        </h4>
+        <h6 class="m-3">
+          Powered by <a href="https://0rganics.org">0rganic's</a> original functions
+        </h6>
+      </b-container>
+      <b-container>
+        <table class="table">
+          <tbody>
+            <tr>
+              <th scope="col">
+                Type
+              </th>
+              <th scope="col">
+                Previewed Total
+              </th>
+              <th scope="col">
+                Donation Required
+              </th>
             </tr>
-          </template>
-        </tbody>
-      </table>
-    </b-container>
+            <template v-for="calc in calced">
+              <tr :key="calc.name+calc.total">
+                <td>{{ calc.name }}</td>
+                <td>{{ formatMoney(calc.total) }}</td>
+                <td>{{ formatMoney(calc.donation) }}</td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+      </b-container>
+    </span>
   </div>
 </template>
 
 <script>
 export default {
-//   async asyncData ({ $axios }) {
-//     const total = (await $axios.$get('http://donate.zeldathon.net/total?unformatted=true'))
-//     const inTotMin = total + 100
-//     IMPORTANT, WHEN TAKING A TOTAL, MULTIPLY BY 100
-//     return { total, inTotMin }
-//   },
+  async fetch () {
+    this.total = ((await this.$axios.$get('https://donate.zeldathon.net/total?unformatted=true')) * 100)
+    this.inTotMin = this.total + 100
+    // IMPORTANT, WHEN TAKING A TOTAL, MULTIPLY BY 100
+  },
   data () {
     return {
       calced: [],
       total: 8788700,
+      inTotMin: 8788800,
       minimumDonation: 100
     }
   },

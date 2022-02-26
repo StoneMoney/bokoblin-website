@@ -45,8 +45,7 @@ import {
 import algoliasearch from 'algoliasearch/lite'
 
 const searchClient = algoliasearch(
-  'KEY GOES HERE',
-  'KEY GOES HERE'
+  'no', 'no'
 )
 export default {
   components: {

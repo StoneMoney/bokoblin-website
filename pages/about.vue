@@ -6,7 +6,7 @@
       <p>This site is community-run and is <em>not</em> affiliated with Kinstone, LLC. or its properties, including but not limited to Zeldathon, Parallel Worlds, Side Quest, and Piece of Heart</p>
       <h2>Data Removal Request</h2>
       <p>
-        If you are listed on this website and wish to be removed, contact us at <a href="mailto:dataremoval@stone.money">dataremoval@stone.money</a>
+        If you are listed on this website and wish to be removed, contact us at <a href="mailto:dataremoval@bokoblin.com">dataremoval@bokoblin.com</a>
       </p>
       <h2>Credits</h2>
       <p>
@@ -31,12 +31,21 @@
       <p>
         <b>Kinstone Team</b> for creating amazing marathons
       </p>
+      <p>
+        <nuxt-link to="/support">
+          Support Bokoblin
+        </nuxt-link>
+      </p>
     </b-container>
   </div>
 </template>
 
 <script>
 export default {
-
+  head () {
+    return {
+      title: 'About Bokoblin'
+    }
+  }
 }
 </script>

@@ -1,4 +1,4 @@
-scalar DateTime
+  scalar DateTime
   
   type Attendance {
     attendee: Attendee!,
@@ -10,6 +10,7 @@ scalar DateTime
   type Attendee {
     id: ID!,
     name: String,
+    twitch_login: String,
     rank: String,
     house: String,
     house_color: String,
@@ -75,6 +76,24 @@ scalar DateTime
     filenames: [Filename]
   }
 
+  type SoundsData {
+    updated: DateTime,
+    matching: Boolean,
+    sounds: [Sound]
+  }
+
+  # Amount is an integer, to get the true monetary amount, divide by 100
+  type Sound {
+    amount: ID!,
+    description: String,
+    verified: Boolean,
+    newsound: Boolean,
+    matched: Boolean
+  }
+
+  # The "Query" type is special: it lists all of the available queries that
+  # clients can execute, along with the return type for each. In this
+  # case, the "books" query returns an array of zero or more Books (defined above).
   type Query {
     attendees: [Attendee],
     attendee(id: Int!): Attendee,
@@ -86,4 +105,7 @@ scalar DateTime
     marathon(id: Int!): Marathon,
     segment(id: Int!): Segment,
     segments(method: String!, id: Int!): [Segment],
+    sounds: [Sound],
+    sound(amount: Int!): Sound,
+    soundsdata: SoundsData
   }

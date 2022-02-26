@@ -24,7 +24,7 @@ export default {
     CharityCard
   },
   async asyncData ({ $axios }) {
-    const charities = (await $axios.$get('https://bokoblin.herokuapp.com/?query={charities{id,full_name}}')).data.charities
+    const charities = (await $axios.$get('https://api.bokoblin.com/?query={charities{id,full_name}}')).data.charities
     return { charities }
   },
   data () {

@@ -8,6 +8,11 @@
         <MarathonCard :data="marathon" />
       </b-col>
     </template>
+    <p class="m-3">
+      Looking for a non-Zeldathon/Kinstone event we might cover? Check our <nuxt-link to="/affiliated">
+        Affiliated Events
+      </nuxt-link> page
+    </p>
   </div>
 </template>
 
@@ -18,7 +23,7 @@ export default {
     MarathonCard
   },
   async asyncData ({ $axios }) {
-    const marathons = (await $axios.$get('https://bokoblin.herokuapp.com/?query={marathons{id,color,type,type_id,full_name,start_date,total,charity{id,full_name}}}')).data.marathons
+    const marathons = (await $axios.$get('https://api.bokoblin.com/?query={marathons{id,color,type,type_id,full_name,start_date,stop_date,total,charity{id,full_name}}}')).data.marathons
     return { marathons }
   },
   data () {

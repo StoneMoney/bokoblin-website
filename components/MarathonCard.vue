@@ -2,8 +2,9 @@
   <div class="mcard-container">
     <div class="marathon-id" :style="'background-color: #'+data.color">
       <nuxt-link :to="'/marathon/'+data.id">
-        <img v-if="data.type_id <= 2" :src="require('~/assets/marathon-rot/'+data.id+'.svg')" class="marathon-logo" :alt="data.full_name+' logo'">
-        <img v-else :src="require('~/assets/marathon-rot/'+(data.type_id*100)+'.png')" class="marathon-logo-broad" :alt="data.full_name+' logo'">
+        <img v-if="data.type == 'Flagship' || data.type == 'Flagship Mini' || data.type == 'Special Event'" :src="require('~/assets/marathon-rot/'+data.id+'.svg')" class="marathon-logo" :alt="data.full_name+' logo'">
+        <img v-else-if="data.type == 'Piece of Heart'" :src="require('~/assets/marathon-rot/500.svg')" class="marathon-logo-broad" :alt="data.full_name+' logo'">
+        <img v-else-if="data.type == 'Side Quest'" :src="require('~/assets/marathon-rot/400.svg')" class="marathon-logo-broad" :alt="data.full_name+' logo'">
       </nuxt-link>
       <!-- <img src="~/assets/1.jpg"> -->
     </div>
@@ -54,6 +55,15 @@
           title="Piece of Heart"
           alt="PoH"
         >
+        <img
+          v-else-if="data.type_id === 6"
+          v-b-tooltip.hover
+          src="~/static/6.svg"
+          width="24px"
+          class="text-right"
+          title="Special Event"
+          alt="Star"
+        >
       </div>
       <b-card-title>
         <nuxt-link :to="'/marathon/'+data.id">
@@ -61,7 +71,13 @@
           <span class="h6 mb-2"><b-icon-arrow-up-right-circle-fill /></span>
         </nuxt-link>
       </b-card-title>
-      <b-card-text>
+      <b-card-text v-if="beforeStart">
+        Has not started yet!
+      </b-card-text>
+      <b-card-text v-else-if="beforeEnd">
+        Ongoing!
+      </b-card-text>
+      <b-card-text v-else>
         Raised {{ toUSD(data.total) }} for <nuxt-link :to="'/cause/'+data.charity.id">
           {{ data.charity.full_name }}
         </nuxt-link>
@@ -83,15 +99,22 @@ export default {
       required: true
     }
   },
+  data () {
+    return {
+      beforeStart: false,
+      beforeEnd: false
+    }
+  },
+  mounted () {
+    const start = new Date(this.data.start_date)
+    const stop = new Date(this.data.stop_date)
+    const now = new Date()
+    this.beforeStart = (start.getTime() > now.getTime())
+    this.beforeEnd = (stop.getTime() > now.getTime())
+  },
   methods: {
     toUSD (input) {
-      const number = input.toString()
-      let dollars = number.split('.')[0]
-      const cents = (number.split('.')[1] || '') + '00'
-      dollars = dollars.split('').reverse().join('')
-        .replace(/(\d{3}(?!$))/g, '$1,')
-        .split('').reverse().join('')
-      return '$' + dollars + '.' + cents.slice(0, 2)
+      return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(input)
     }
   }
 }

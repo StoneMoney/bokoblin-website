@@ -5,6 +5,10 @@ export default {
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
     title: 'bokoblin-website',
+    meta: [
+      { charset: 'utf-8' },
+      { name: 'viewport', content: 'width=device-width, initial-scale=1' }
+    ],
     htmlAttrs: {
       lang: 'en' // it sets the language English
     }
@@ -37,6 +41,7 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios'
   ],
+
   bootstrapVue: {
     icons: true
   },
@@ -60,6 +65,7 @@ export default {
       useWebmanifestExtension: false
     }
   },
+
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {
     transpile: ['vue-youtube-embed', 'vue-instantsearch', 'instantsearch.js/es'],

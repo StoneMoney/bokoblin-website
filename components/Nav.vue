@@ -1,5 +1,5 @@
 <template>
-  <client-only placeholder="Loading...">
+  <client-only>
     <b-navbar toggleable="lg" type="dark" variant="dark" sticky>
       <b-navbar-brand href="#">
         <nuxt-link to="/" class="unstyle">
@@ -13,6 +13,13 @@
             <nuxt-link to="/marathons" class="unstyle">
               <div class="nav-link">
                 Marathons
+              </div>
+            </nuxt-link>
+          </li>
+          <li>
+            <nuxt-link to="/sounds" class="unstyle">
+              <div class="nav-link">
+                Secret Sounds
               </div>
             </nuxt-link>
           </li>
@@ -39,13 +46,18 @@
           </li>
           <b-nav-item-dropdown text="Tools" right>
             <b-dropdown-item>
+              <nuxt-link to="/tools/mobileapp" class="unstyle">
+                Mobile App
+              </nuxt-link>
+            </b-dropdown-item>
+            <b-dropdown-item>
               <nuxt-link to="/tools/extension" class="unstyle">
                 Extension
               </nuxt-link>
             </b-dropdown-item>
             <b-dropdown-item>
-              <nuxt-link to="/tools/calc" class="unstyle">
-                Calculator
+              <nuxt-link to="/tools/graphs" class="unstyle">
+                Graphs
               </nuxt-link>
             </b-dropdown-item>
             <b-dropdown-item>
@@ -76,6 +88,12 @@
             </b-dropdown-item>
             <b-dropdown-item target="_blank" href="https://docs.google.com/spreadsheets/d/13Zh1ovK_7zBIk_bCEMeTosv3jf9asegRTQyCTCC3O58/edit#gid=333803068">
               Graphs
+            </b-dropdown-item>
+            <hr>
+            <b-dropdown-item>
+              <nuxt-link to="/affiliated" class="unstyle">
+                Affiliated Events
+              </nuxt-link>
             </b-dropdown-item>
           </b-nav-item-dropdown>
         </b-navbar-nav>

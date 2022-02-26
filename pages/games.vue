@@ -10,6 +10,7 @@
             <GameCard :data="game" />
           </b-list-group-item>
         </template>
+        <b-nav-item :to="{ hash: '#videos' }" class="navtext">VIDEOS</b-nav-item>
       </b-list-group>
     </b-col>
   </div>
@@ -22,12 +23,12 @@ export default {
     GameCard
   },
   async asyncData ({ $axios }) {
-    const games = (await $axios.$get('https://bokoblin.herokuapp.com/?query={games{id,title,isZelda,isEvent}}')).data.games
+    const games = (await $axios.$get('https://api.bokoblin.com/?query={games{id,title,isZelda,isEvent}}')).data.games
     return { games }
   },
   data () {
     return {
-      marathons: []
+      games: []
     }
   },
   head () {

@@ -1,39 +1,51 @@
 <template>
   <div>
-    <b-container>
-      <h1 class="m-3">
-        Marathon Time Conversion Tool
-      </h1>
-      <b-row>
-        <b-col md="4">
-          <b-container style="max-height:50vh;overflow-y:scroll">
-            <b-list-group text="Dropdown" variant="info" style="cursor:pointer">
-              <template v-for="marathon in marathons">
-                <b-list-group-item :key="marathon.id" :value="marathon.id" :style="selected.id == marathon.id ? 'background-color:#'+marathon.color+';color:white' : ''" @click="selected = marathon">
-                  {{ marathon.slug }}
-                </b-list-group-item>
-              </template>
-            </b-list-group>
-          </b-container>
-        </b-col>
-        <b-col md="6">
-          <h1>Selected: {{ selected.slug }}</h1>
-          <h3>Started: {{ new Date(selected.start_date).toLocaleString() }}</h3>
-          In:
-          <b-input v-model="time_in" placeholder="000:00:00" />
-          Out:
-          <b-input disabled :value="getTimeOut(time_in,selected)" />
-        </b-col>
-      </b-row>
-    </b-container>
+    <span v-if="$fetchState.pending" key="pending">
+      <b-container class="loading-zone text-center">
+        <b-spinner style="width: 7rem; height: 7rem;margin-left: auto;margin-right:auto;" variant="danger" type="grow" label="Spinning" />
+        <h1 class="text-grey mt-2">
+          Loading
+        </h1>
+      </b-container>
+    </span>
+    <span v-else-if="$fetchState.error" key="errored">
+      Error in Fetching...
+    </span>
+    <span v-else key="success">
+      <b-container>
+        <h1 class="m-3">
+          Marathon Time Conversion Tool
+        </h1>
+        <b-row>
+          <b-col md="4">
+            <b-container style="max-height:50vh;overflow-y:scroll">
+              <b-list-group text="Dropdown" variant="info" style="cursor:pointer">
+                <template v-for="marathon in marathons">
+                  <b-list-group-item :key="marathon.id" :value="marathon.id" :style="selected.id == marathon.id ? 'background-color:#'+marathon.color+';color:white' : ''" @click="selected = marathon">
+                    {{ marathon.slug }}
+                  </b-list-group-item>
+                </template>
+              </b-list-group>
+            </b-container>
+          </b-col>
+          <b-col md="6">
+            <h1>Selected: {{ selected.slug }}</h1>
+            <h3>Started: {{ new Date(selected.start_date).toLocaleString() }}</h3>
+            In:
+            <b-input v-model="time_in" placeholder="000:00:00" />
+            Out:
+            <b-input disabled :value="getTimeOut(time_in,selected)" />
+          </b-col>
+        </b-row>
+      </b-container>
+    </span>
   </div>
 </template>
 
 <script>
 export default {
-  async asyncData ({ $axios }) {
-    const marathons = (await $axios.$get('https://bokoblin.herokuapp.com/?query={marathons{id,slug,start_date,color}}')).data.marathons
-    return { marathons }
+  async fetch () {
+    this.marathons = (await this.$axios.$get('https://api.bokoblin.com/?query={marathons{id,slug,start_date,color}}')).data.marathons
   },
   data () {
     return {

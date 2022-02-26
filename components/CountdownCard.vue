@@ -1,6 +1,6 @@
 <template>
   <b-container role="banner" class="mx-auto m-2">
-    <b-card :style="'background-color: #'+marathon.color+';'">
+    <b-card :style="'background-color: #' + marathon.color + ';'">
       <div class="positiongrid">
         <img
           v-if="marathon.type_id === 1"
@@ -10,7 +10,7 @@
           class="text-right"
           title="Flagship Event"
           alt="Z"
-          style="filter:invert();"
+          style="filter: invert()"
         >
         <img
           v-else-if="marathon.type_id === 2"
@@ -20,7 +20,7 @@
           class="text-right"
           title="Flagship Mini"
           alt="Z"
-          style="filter:invert();"
+          style="filter: invert()"
         >
         <img
           v-else-if="marathon.type_id === 3"
@@ -30,7 +30,7 @@
           class="text-right"
           title="Parallel Worlds"
           alt="PW"
-          style="filter:invert();"
+          style="filter: invert()"
         >
         <img
           v-else-if="marathon.type_id === 4"
@@ -40,7 +40,7 @@
           class="text-right"
           title="Side Quest"
           alt="SQ"
-          style="filter:invert();"
+          style="filter: invert()"
         >
         <img
           v-else-if="marathon.type_id === 5"
@@ -50,17 +50,29 @@
           class="text-right"
           title="Piece of Heart"
           alt="PoH"
-          style="filter:invert();"
+          style="filter: invert()"
         >
         <div class="text-center">
           <h4 class="text-light">
-            The next event: <nuxt-link class="unstyle" :to="'marathon/'+marathon.id">
+            The next event:
+            <nuxt-link prefetch class="unstyle" :to="'marathon/' + marathon.id">
               {{ marathon.full_name }}
-            </nuxt-link> begins on {{ dateNoTime(marathon.start_date) }}
+            </nuxt-link>
+            begins on {{ dateNoTime(marathon.start_date) }}
           </h4>
           <h5 class="text-light">
-            <span style="font-family:monospace;">{{ countdown }}</span> (Approx start date, subject to change)
+            <span style="font-family: monospace">{{ countdown }}</span>
           </h5>
+          <nuxt-link prefetch :to="'/marathon/'+marathon.id">
+            <b-button variant="light" size="mb-1">
+              View More
+            </b-button>
+          </nuxt-link>
+          <!-- <a href="sq3.ics">
+            <b-button variant="light" size="mb-1">
+              iCal Download
+            </b-button>
+          </a> -->
         </div>
       </div>
     </b-card>
@@ -91,17 +103,17 @@ export default {
       let seconds = parseInt((duration / 1000) % 60)
       let minutes = parseInt((duration / (1000 * 60)) % 60)
       let hours = parseInt((duration / (1000 * 60 * 60)) % 24)
-      const days = parseInt((duration / (1000 * 60 * 60 * 24)))
-      hours = (hours < 10 && hours >= 0) ? '0' + hours : hours
-      minutes = (minutes < 10 && minutes >= 0) ? '0' + minutes : minutes
-      seconds = (seconds < 10 && seconds >= 0) ? '0' + seconds : seconds
-      me.countdown = (days + ':' + hours + ':' + minutes + ':' + seconds + '')
+      const days = parseInt(duration / (1000 * 60 * 60 * 24))
+      hours = hours < 10 && hours >= 0 ? '0' + hours : hours
+      minutes = minutes < 10 && minutes >= 0 ? '0' + minutes : minutes
+      seconds = seconds < 10 && seconds >= 0 ? '0' + seconds : seconds
+      me.countdown = days + ':' + hours + ':' + minutes + ':' + seconds + ''
     }, 1000)
   },
   methods: {
     dateNoTime (date) {
       const nt = new Date(date)
-      return ((nt.getMonth() + 1) + '/' + nt.getDate() + '/' + nt.getFullYear())
+      return nt.getMonth() + 1 + '/' + nt.getDate() + '/' + nt.getFullYear()
     }
   }
 }

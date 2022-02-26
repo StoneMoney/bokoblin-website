@@ -11,6 +11,9 @@
         <nuxt-link to="/about">
           About
         </nuxt-link> |
+        <nuxt-link to="/support">
+          Support
+        </nuxt-link> |
         <nuxt-link to="/api">
           API
         </nuxt-link> |
@@ -50,6 +53,18 @@ export default {
 .page-enter,
 .page-leave-to {
   opacity: 0;
+}
+
+.loading-zone {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  margin-top: 30vh;
+  height: 20vh;
+  margin-bottom: 30vh;
+  width: 100vw;
+  overflow: hidden;
 }
 
 html {

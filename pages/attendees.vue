@@ -41,7 +41,7 @@ export default {
     AttendeeCard
   },
   async asyncData ({ $axios }) {
-    const attendees = (await $axios.$get('https://bokoblin.herokuapp.com/?query={attendees{id,name,house,rank}}')).data.attendees
+    const attendees = (await $axios.$get('https://api.bokoblin.com/?query={attendees{id,name,house,rank}}')).data.attendees
     return { attendees }
   },
   data () {

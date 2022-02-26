@@ -5,18 +5,18 @@
         Bokoblin Extension
       </h1>
       <p>
-        A browser extension for use during Zeldathon & SideQuest marathons!
+        A browser extension for use during Zeldathon &amp; SideQuest marathons!
       </p>
       <p>
         Get it on your browser of choice here:
         <br>
         <b-button variant="secondary" style="background-color:#26a69a" href="https://chrome.google.com/webstore/detail/zeldathon-donation-compan/lpkoibgmidgpjhnlhnnccgekdiikpggi?hl=en&authuser=0" class="mb-1">
-          Google Chrome
+          Google Chrome &amp; Edge
         </b-button>
-        <b-button variant="secondary" style="background-color:#2196F3" href="https://microsoftedge.microsoft.com/addons/detail/zeldathon-donation-compan/lngfpaiknggifchneemndkianjkdlpaa" class="mb-1">
+        <!-- <b-button variant="secondary" style="background-color:#2196F3" href="https://microsoftedge.microsoft.com/addons/detail/zeldathon-donation-compan/lngfpaiknggifchneemndkianjkdlpaa" class="mb-1">
           Microsoft Edge
-        </b-button>
-        <b-button variant="secondary" style="background-color:#ff9800" href="https://addons.mozilla.org/en-US/firefox/addon/unofficial-zeldathon-companion/" class="mb-1">
+        </b-button> -->
+        <b-button variant="secondary" style="background-color:#ff9800" href="https://addons.mozilla.org/en-US/firefox/addon/bokoblin/" class="mb-1">
           Mozilla Firefox
         </b-button>
       </p>
