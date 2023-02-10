@@ -4,7 +4,7 @@
     attendee: Attendee!,
     marathon: Marathon!,
     award: String,
-    present: Boolean!
+    location: String
   }
 
   type Attendee {

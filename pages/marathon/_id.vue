@@ -23,7 +23,7 @@
               </div>
             </b-badge> {{ marathon.full_name }}
           </h1>
-          <span v-if="marathon.id == 27">
+          <span v-if="marathon.id == 28">
             <b-container role="banner">
               <b-card bg-variant="danger" class="text-light">
                 <b-icon-exclamation-diamond-fill /> This event will be ongoing and data updates will not be available within Bokoblin until the conclusion of the event!
@@ -74,10 +74,10 @@
             <b-collapse id="collapse-1" class="mt-2">
               <b-list-group>
                 <template v-for="attended in marathon.attendance">
-                  <b-list-group-item v-if="attended.present == 1 && attended.attendee.rank !== 'Inactive'" :key="attended.attendee.id" v-b-tooltip.hover.right="attended.award ? '&quot;'+attended.award+'&quot; award' : ''">
+                  <b-list-group-item v-if="attended.attendee.rank !== 'Inactive'" :key="attended.attendee.id" v-b-tooltip.hover.right="attended.award ? '&quot;'+attended.award+'&quot; award' : ''">
                     <nuxt-link :to="'/attendee/'+attended.attendee.id">
                       {{ attended.attendee.name }}
-                    </nuxt-link>
+                    </nuxt-link> {{ attended.location !== "In-Person" ? `(${attended.location})` : null }}
                   </b-list-group-item>
                 </template>
               </b-list-group>
@@ -115,7 +115,7 @@ export default {
     DonationsOverTimeGraph
   },
   async fetch () {
-    this.marathon = (await this.$axios.$get(`https://api.bokoblin.com/?query={marathon(id:${this.$route.params.id}){id,color,type,type_id,total,full_name,playlist,start_date,stop_date,donationsTime{hour,total},charity{id,slug},attendance{attendee{id,name,rank},award,present}segments{id,game{title,id,isZelda,isEvent},modifier,runners{attendee{name,id,rank},runner_rank},filenames{filename,note},raised,start_time,end_time,vod,time_offset}}}`)).data.marathon
+    this.marathon = (await this.$axios.$get(`https://api.bokoblin.com/?query={marathon(id:${this.$route.params.id}){id,color,type,type_id,total,full_name,playlist,start_date,stop_date,donationsTime{hour,total},charity{id,slug},attendance{attendee{id,name,rank},award,location},segments{id,game{title,id,isZelda,isEvent},modifier,runners{attendee{name,id,rank},runner_rank},filenames{filename,note},raised,start_time,end_time,vod,time_offset}}}`)).data.marathon
     if (!this.marathon) {
       // set status code on server and
       if (process.server) {

@@ -10,7 +10,9 @@
             <GameCard :data="game" />
           </b-list-group-item>
         </template>
-        <b-nav-item :to="{ hash: '#videos' }" class="navtext">VIDEOS</b-nav-item>
+        <b-nav-item :to="{ hash: '#videos' }" class="navtext">
+          VIDEOS
+        </b-nav-item>
       </b-list-group>
     </b-col>
   </div>

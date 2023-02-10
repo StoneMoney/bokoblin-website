@@ -51,8 +51,8 @@
             <b-list-group-item class="d-flex justify-content-between align-items-center">
               Status (rank): {{ attendee.rank }}
             </b-list-group-item>
-            <b-list-group-item v-if="raised > 0" class="d-flex justify-content-between align-items-center">
-              Raised: {{ toUSD(raised) }}
+            <b-list-group-item v-if="(attendee.flagshipAttendance.length + attendee.otherAttendance.length) > 0" class="d-flex justify-content-between align-items-center">
+              Events: {{ attendee.flagshipAttendance.length + attendee.otherAttendance.length }}
             </b-list-group-item>
           </b-list-group>
           <span v-if="(attendee.flagshipAttendance.length + attendee.otherAttendance.length) > 0">
@@ -66,7 +66,7 @@
                   <nuxt-link :to="'/marathon/'+attended.marathon.id" class="unstyledx">
                     <b-icon-controller v-if="attended.runner" v-b-tooltip="'Game Runner'" />
                     <img :src="require('~/assets/marathon/'+attended.marathon.id+'.svg')" class="marathon-logo" :alt="attended.marathon.slug">
-                    <span v-if="attended.present == 0" v-b-tooltip.hover.bottom="'Recieved award, but was not present at marathon'">*</span>
+                    <span v-if="attended.location !== 'In-Person'" v-b-tooltip.hover.bottom="'Location: '+attended.location">*</span>
                   </nuxt-link>
                 </div>
               </template>
@@ -114,7 +114,7 @@
                       width="24px"
                       alt="Star"
                     >
-                    <span v-if="attended.present == 0" v-b-tooltip.hover.bottom="'Was not present at marathon'">*</span>
+                    <span v-if="attended.location !== 'In-Person'" v-b-tooltip.hover.bottom="'Location: '+attended.location">*</span>
                   </nuxt-link>
                 </div>
               </template>
@@ -183,7 +183,7 @@ export default {
   async fetch () {
     this.attendee = (
       await this.$axios.$get(
-        `https://api.bokoblin.com/?query={attendee(id:${this.$route.params.id}){id,name,house,house_color,rank,attendance{present,award,marathon{id,slug,full_name,color,type}},segments{id,game{title,id,isZelda,isEvent},modifier,marathon{id,full_name,slug,color,type},runners{attendee{name,id,rank},runner_rank},filenames{filename,note},raised,start_time,end_time,vod,time_offset}}}`
+        `https://api.bokoblin.com/?query={attendee(id:${this.$route.params.id}){id,name,house,house_color,rank,attendance{location,award,marathon{id,slug,full_name,color,type}},segments{id,game{title,id,isZelda,isEvent},modifier,marathon{id,full_name,slug,color,type},runners{attendee{name,id,rank},runner_rank},filenames{filename,note},raised,start_time,end_time,vod,time_offset}}}`
       )
     ).data.attendee
     if (!this.attendee) {
@@ -266,7 +266,7 @@ export default {
       // Every marathon WITH a run but did not have any attendance credit
       marathonsWithSegmentsWithoutAttendance.forEach(function (noseg) {
         const att = {
-          present: 1,
+          location: 'In-Person',
           runner: true,
           marathon: marathons.find(element => parseInt(element.id) === noseg),
           award: ''

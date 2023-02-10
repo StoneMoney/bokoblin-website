@@ -4,5 +4,5 @@
     },
     "eslint.validate": [
         "javascript"
-    ]
+    ],
 }
